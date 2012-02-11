@@ -1,0 +1,12 @@
+{
+  "name": "SubWars",
+  "version": "0.0.2",
+  "dependencies": {
+    "express": "latest",
+    "redis": "latest",
+    "jade": "latest",
+    "cookiejar": "latest",
+    "faye-websocket": "latest",
+    "connect-assets": "latest"
+  }
+}

@@ -1,0 +1,21 @@
+# vim
+*.swp
+
+# Mac Finder files
+*.DS_Store
+
+# Logs
+log/*
+
+tmp
+
+# Vagrant
+.vagrant
+
+# Chef
+.chef/knife.rb
+
+# Heroku
+Gemfile
+Gemfile.lock
+node_modules
