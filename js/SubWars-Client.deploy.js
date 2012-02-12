@@ -1,4 +1,269 @@
 smalltalk.addPackage('SubWars-Client', {});
+smalltalk.addClass('SubWarsApp', smalltalk.Widget, ['div', 'client', 'geo', 'currentLocation', 'brand', 'nav', 'tools', 'map', 'polymaps', 'consoleForm'], 'SubWars-Client');
+smalltalk.addMethod(
+unescape('_initialize'),
+smalltalk.method({
+selector: unescape('initialize'),
+fn: function (){
+var self=this;
+smalltalk.send(self, "_initialize", [], smalltalk.Widget);
+(self['@client']=smalltalk.send((smalltalk.FayeClient || FayeClient), "_new", []));
+(self['@geo']=smalltalk.send((smalltalk.GeoLocation || GeoLocation), "_new", []));
+(self['@currentLocation']=smalltalk.send((smalltalk.Location || Location), "_newAtPARC", []));
+(self['@polymaps']=smalltalk.send(smalltalk.send((typeof window == 'undefined' ? nil : window), "_org", []), "_polymaps", []));
+return self;}
+}),
+smalltalk.SubWarsApp);
+
+smalltalk.addMethod(
+unescape('_pageClasses'),
+smalltalk.method({
+selector: unescape('pageClasses'),
+fn: function (){
+var self=this;
+return [(smalltalk.MapPage || MapPage)];
+return self;}
+}),
+smalltalk.SubWarsApp);
+
+smalltalk.addMethod(
+unescape('_renderNavOn_'),
+smalltalk.method({
+selector: unescape('renderNavOn%3A'),
+fn: function (html){
+var self=this;
+(function($rec){smalltalk.send($rec, "_class_", [unescape("navbar%20navbar-fixed-top")]);return smalltalk.send($rec, "_with_", [(function(){return (function($rec){smalltalk.send($rec, "_class_", [unescape("navbar-inner")]);return smalltalk.send($rec, "_with_", [(function(){return (function($rec){smalltalk.send($rec, "_class_", [unescape("container-fluid")]);return smalltalk.send($rec, "_with_", [(function(){(function($rec){smalltalk.send($rec, "_class_", [unescape("btn%20btn-navbar")]);smalltalk.send($rec, "_at_put_", [unescape("data-toggle"), "collapse"]);smalltalk.send($rec, "_at_put_", [unescape("data-target"), unescape(".nav-collapse")]);return smalltalk.send($rec, "_with_", [(function(){smalltalk.send(smalltalk.send(html, "_span", []), "_class_", [unescape("icon-bar")]);smalltalk.send(smalltalk.send(html, "_span", []), "_class_", [unescape("icon-bar")]);return smalltalk.send(smalltalk.send(html, "_span", []), "_class_", [unescape("icon-bar")]);})]);})(smalltalk.send(html, "_a", []));(self['@brand']=(function($rec){smalltalk.send($rec, "_class_", ["brand"]);return smalltalk.send($rec, "_href_", [unescape("%23")]);})(smalltalk.send(html, "_a", [])));return (function($rec){smalltalk.send($rec, "_class_", [unescape("nav-collapse")]);return smalltalk.send($rec, "_with_", [(function(){(self['@nav']=smalltalk.send(smalltalk.send(html, "_ul", []), "_class_", ["nav"]));return (self['@tools']=smalltalk.send(smalltalk.send(html, "_ul", []), "_class_", [unescape("nav%20pull-right")]));})]);})(smalltalk.send(html, "_div", []));})]);})(smalltalk.send(html, "_div", []));})]);})(smalltalk.send(html, "_div", []));})]);})(smalltalk.send(html, "_div", []));
+return self;}
+}),
+smalltalk.SubWarsApp);
+
+smalltalk.addMethod(
+unescape('_updateTools'),
+smalltalk.method({
+selector: unescape('updateTools'),
+fn: function (){
+var self=this;
+smalltalk.send(self['@tools'], "_contents_", [(function(html){return (function($rec){smalltalk.send($rec, "_class_", ["dropdown"]);return smalltalk.send($rec, "_with_", [(function(){(function($rec){smalltalk.send($rec, "_href_", [unescape("%23")]);smalltalk.send($rec, "_class_", [unescape("dropdown-toggle")]);smalltalk.send($rec, "_at_put_", [unescape("data-toggle"), "dropdown"]);return smalltalk.send($rec, "_with_", [(function(){smalltalk.send(html, "_with_", ["Tools "]);return smalltalk.send(smalltalk.send(html, "_tag_", ["b"]), "_class_", ["caret"]);})]);})(smalltalk.send(html, "_a", []));return (function($rec){smalltalk.send($rec, "_class_", [unescape("dropdown-menu")]);return smalltalk.send($rec, "_with_", [(function(){smalltalk.send(smalltalk.send(html, "_li", []), "_with_", [(function(){return (function($rec){smalltalk.send($rec, "_with_", ["Toggle IDE"]);smalltalk.send($rec, "_href_", [unescape("%23ide")]);return smalltalk.send($rec, "_onClick_", [(function(e){smalltalk.send(e, "_preventDefault", []);return smalltalk.send((typeof window == 'undefined' ? nil : window), "_toggleAmberIDE", []);})]);})(smalltalk.send(html, "_a", []));})]);smalltalk.send(smalltalk.send(html, "_li", []), "_class_", ["divider"]);smalltalk.send(smalltalk.send(html, "_li", []), "_with_", [(function(){return (function($rec){smalltalk.send($rec, "_with_", ["Browse SubWars"]);smalltalk.send($rec, "_href_", [unescape("%23browse")]);return smalltalk.send($rec, "_onClick_", [(function(e){smalltalk.send(e, "_preventDefault", []);return smalltalk.send((smalltalk.Browser || Browser), "_openOn_", [(smalltalk.SubWarsApp || SubWarsApp)]);})]);})(smalltalk.send(html, "_a", []));})]);smalltalk.send(smalltalk.send(html, "_li", []), "_with_", [(function(){return (function($rec){smalltalk.send($rec, "_with_", ["Inspect SubWars"]);smalltalk.send($rec, "_href_", [unescape("%23inspect")]);return smalltalk.send($rec, "_onClick_", [(function(e){smalltalk.send(e, "_preventDefault", []);return smalltalk.send(smalltalk.send((smalltalk.SubWarsApp || SubWarsApp), "_instance", []), "_inspect", []);})]);})(smalltalk.send(html, "_a", []));})]);return smalltalk.send(smalltalk.send(html, "_li", []), "_with_", [(function(){return (function($rec){smalltalk.send($rec, "_with_", ["Restart SubWars"]);smalltalk.send($rec, "_href_", [unescape("%23restart")]);return smalltalk.send($rec, "_onClick_", [(function(e){smalltalk.send(e, "_preventDefault", []);return smalltalk.send((smalltalk.SubWarsApp || SubWarsApp), "_restart", []);})]);})(smalltalk.send(html, "_a", []));})]);})]);})(smalltalk.send(html, "_ul", []));})]);})(smalltalk.send(html, "_li", []));})]);
+return self;}
+}),
+smalltalk.SubWarsApp);
+
+smalltalk.addMethod(
+unescape('_renderOn_'),
+smalltalk.method({
+selector: unescape('renderOn%3A'),
+fn: function (html){
+var self=this;
+(self['@div']=(function($rec){smalltalk.send($rec, "_id_", ["subwars"]);return smalltalk.send($rec, "_with_", [(function(){return (function($rec){smalltalk.send($rec, "_renderNavOn_", [html]);smalltalk.send($rec, "_renderMapOn_", [html]);smalltalk.send($rec, "_update", []);return smalltalk.send($rec, "_startTracking", []);})(self);})]);})(smalltalk.send(html, "_div", [])));
+return self;}
+}),
+smalltalk.SubWarsApp);
+
+smalltalk.addMethod(
+unescape('_show'),
+smalltalk.method({
+selector: unescape('show'),
+fn: function (){
+var self=this;
+smalltalk.send(self, "_appendToJQuery_", [smalltalk.send("body", "_asJQuery", [])]);
+return self;}
+}),
+smalltalk.SubWarsApp);
+
+smalltalk.addMethod(
+unescape('_update'),
+smalltalk.method({
+selector: unescape('update'),
+fn: function (){
+var self=this;
+(function($rec){smalltalk.send($rec, "_updateNav", []);return smalltalk.send($rec, "_updateTools", []);})(self);
+return self;}
+}),
+smalltalk.SubWarsApp);
+
+smalltalk.addMethod(
+unescape('_renderMapOn_'),
+smalltalk.method({
+selector: unescape('renderMapOn%3A'),
+fn: function (html){
+var self=this;
+var svg=nil;
+smalltalk.send(smalltalk.send(html, "_div", []), "_id_", ["map"]);
+svg = document.getElementById("map").appendChild(org.polymaps.svg("svg"));
+(self['@map']=smalltalk.send(smalltalk.send(smalltalk.send(smalltalk.send((typeof window == 'undefined' ? nil : window), "_org", []), "_polymaps", []), "_map", []), "_container_", [svg]));
+smalltalk.send(self['@map'], "_zoom_", [(16)]);
+self['@map'].add(org.polymaps.image()
+		.url(org.polymaps.url("http://{S}tile.cloudmade.com"
+		+ "/4dc7790c1c744bdab4909fdb857d642d" // subwars
+		+ "/52152/256/{Z}/{X}/{Y}.png")
+		.hosts(["a.", "b.", "c.", ""])));;
+return self;}
+}),
+smalltalk.SubWarsApp);
+
+smalltalk.addMethod(
+unescape('_startTracking'),
+smalltalk.method({
+selector: unescape('startTracking'),
+fn: function (){
+var self=this;
+smalltalk.send(self['@geo'], "_watchPosition_", [(function(position){return smalltalk.send(self, "_updateLat_lng_", [smalltalk.send(smalltalk.send(position, "_coords", []), "_latitude", []), smalltalk.send(smalltalk.send(position, "_coords", []), "_longitude", [])]);})]);
+return self;}
+}),
+smalltalk.SubWarsApp);
+
+smalltalk.addMethod(
+unescape('_stopTracking'),
+smalltalk.method({
+selector: unescape('stopTracking'),
+fn: function (){
+var self=this;
+smalltalk.send(self['@geo'], "_clearWatch", []);
+return self;}
+}),
+smalltalk.SubWarsApp);
+
+smalltalk.addMethod(
+unescape('_destroy'),
+smalltalk.method({
+selector: unescape('destroy'),
+fn: function (){
+var self=this;
+(($receiver = self['@geo']) != nil && $receiver != undefined) ? (function(){return smalltalk.send(self['@geo'], "_clearWatch", []);})() : nil;
+(($receiver = self['@client']) != nil && $receiver != undefined) ? (function(){return smalltalk.send(self['@client'], "_disconnect", []);})() : nil;
+(($receiver = self['@div']) != nil && $receiver != undefined) ? (function(){return smalltalk.send(smalltalk.send(self['@div'], "_asJQuery", []), "_remove", []);})() : nil;
+return self;}
+}),
+smalltalk.SubWarsApp);
+
+smalltalk.addMethod(
+unescape('_updateNav'),
+smalltalk.method({
+selector: unescape('updateNav'),
+fn: function (){
+var self=this;
+smalltalk.send(self['@nav'], "_contents_", [(function(html){smalltalk.send(smalltalk.send(html, "_li", []), "_with_", [(function(){(self['@consoleForm']=(function($rec){smalltalk.send($rec, "_class_", [unescape("form-search%20navbar-search%20pull-left")]);return smalltalk.send($rec, "_with_", [(function(){return (function($rec){smalltalk.send($rec, "_type_", ["text"]);smalltalk.send($rec, "_id_", ["console"]);smalltalk.send($rec, "_placeholder_", ["Chat"]);return smalltalk.send($rec, "_class_", [unescape("search-query%20span1")]);})(smalltalk.send(html, "_input", []));})]);})(smalltalk.send(html, "_form", [])));return smalltalk.send(smalltalk.send(self['@consoleForm'], "_asJQuery", []), "_bind_do_", ["submit", (function(e, input){smalltalk.send(e, "_preventDefault", []);(input=smalltalk.send(unescape("%23console"), "_asJQuery", []));smalltalk.send(self, "_processConsoleCommand_", [smalltalk.send(input, "_val", [])]);return smalltalk.send(input, "_val_", [""]);})]);})]);return smalltalk.send(smalltalk.send(html, "_li", []), "_with_", [(function(){return (function($rec){smalltalk.send($rec, "_with_", ["IDE"]);smalltalk.send($rec, "_href_", [unescape("%23ide")]);return smalltalk.send($rec, "_onClick_", [(function(e){smalltalk.send(e, "_preventDefault", []);return smalltalk.send((smalltalk.Browser || Browser), "_openOn_", [(smalltalk.SubWarsApp || SubWarsApp)]);})]);})(smalltalk.send(html, "_a", []));})]);})]);
+return self;}
+}),
+smalltalk.SubWarsApp);
+
+smalltalk.addMethod(
+unescape('_processConsoleCommand_'),
+smalltalk.method({
+selector: unescape('processConsoleCommand%3A'),
+fn: function (aCommandString){
+var self=this;
+((($receiver = smalltalk.send(aCommandString, "_match_", [unescape("%5Egh%20")])).klass === smalltalk.Boolean) ? ($receiver ? (function(){return smalltalk.send((typeof window == 'undefined' ? nil : window), "_alert_", ["I should lookup the GeoHash you provided"]);})() : (function(){return smalltalk.send(self['@client'], "_chat_", [aCommandString]);})()) : smalltalk.send($receiver, "_ifTrue_ifFalse_", [(function(){return smalltalk.send((typeof window == 'undefined' ? nil : window), "_alert_", ["I should lookup the GeoHash you provided"]);}), (function(){return smalltalk.send(self['@client'], "_chat_", [aCommandString]);})]));
+return self;}
+}),
+smalltalk.SubWarsApp);
+
+smalltalk.addMethod(
+unescape('_updateLat_lng_'),
+smalltalk.method({
+selector: unescape('updateLat%3Alng%3A'),
+fn: function (aLat, aLng){
+var self=this;
+var loc=nil;
+var geoJson=nil;
+var coord=nil;
+(loc=smalltalk.send((smalltalk.Location || Location), "_newLat_lng_", [aLat, aLng]));
+smalltalk.send(loc, "_updateGeoHash", []);
+smalltalk.send(self['@map'], "_center_", [smalltalk.HashedCollection._fromPairs_([smalltalk.send("lat", "__minus_gt", [aLat]),smalltalk.send("lon", "__minus_gt", [aLng])])]);
+(coord=smalltalk.send((smalltalk.Array || Array), "_new_", [(5)]));
+(function($rec){smalltalk.send($rec, "_at_put_", [(1), smalltalk.send((smalltalk.Array || Array), "_with_with_", [smalltalk.send(loc, "_boundingMinLng", []), smalltalk.send(loc, "_boundingMinLat", [])])]);smalltalk.send($rec, "_at_put_", [(2), smalltalk.send((smalltalk.Array || Array), "_with_with_", [smalltalk.send(loc, "_boundingMaxLng", []), smalltalk.send(loc, "_boundingMinLat", [])])]);smalltalk.send($rec, "_at_put_", [(3), smalltalk.send((smalltalk.Array || Array), "_with_with_", [smalltalk.send(loc, "_boundingMaxLng", []), smalltalk.send(loc, "_boundingMaxLat", [])])]);smalltalk.send($rec, "_at_put_", [(4), smalltalk.send((smalltalk.Array || Array), "_with_with_", [smalltalk.send(loc, "_boundingMinLng", []), smalltalk.send(loc, "_boundingMaxLat", [])])]);return smalltalk.send($rec, "_at_put_", [(5), smalltalk.send((smalltalk.Array || Array), "_with_with_", [smalltalk.send(loc, "_boundingMinLng", []), smalltalk.send(loc, "_boundingMinLat", [])])]);})(coord);
+(geoJson=(function($rec){smalltalk.send($rec, "_features_", [smalltalk.send((smalltalk.Array || Array), "_new_", [smalltalk.HashedCollection._fromPairs_([smalltalk.send("geometry", "__minus_gt", [smalltalk.HashedCollection._fromPairs_([smalltalk.send("coordinates", "__minus_gt", [coord]),smalltalk.send("type", "__minus_gt", ["LineString"])])])])])]);return smalltalk.send($rec, "_on_do_", ["load", (function(e){return smalltalk.send(smalltalk.send(e, "_features", []), "_do_", [(function(feature){return smalltalk.send(smalltalk.send(feature, "_element", []), "_setAttribute_val_", ["style", unescape("stroke%3A%20red%3B")]);})]);})]);})(smalltalk.send(self['@polymaps'], "_geoJson", [])));
+smalltalk.send(self['@map'], "_add_", [geoJson]);
+return self;}
+}),
+smalltalk.SubWarsApp);
+
+
+smalltalk.SubWarsApp.klass.iVarNames = ['instance'];
+smalltalk.addMethod(
+unescape('_start'),
+smalltalk.method({
+selector: unescape('start'),
+fn: function (){
+var self=this;
+return (function($rec){smalltalk.send($rec, "_show", []);return smalltalk.send($rec, "_yourself", []);})(smalltalk.send(self, "_instance", []));
+return self;}
+}),
+smalltalk.SubWarsApp.klass);
+
+smalltalk.addMethod(
+unescape('_instance'),
+smalltalk.method({
+selector: unescape('instance'),
+fn: function (){
+var self=this;
+return (($receiver = self['@instance']) == nil || $receiver == undefined) ? (function(){return (self['@instance']=smalltalk.send(self, "_new", []));})() : $receiver;
+return self;}
+}),
+smalltalk.SubWarsApp.klass);
+
+smalltalk.addMethod(
+unescape('_restart'),
+smalltalk.method({
+selector: unescape('restart'),
+fn: function (){
+var self=this;
+(($receiver = smalltalk.send(self, "_instance", [])) != nil && $receiver != undefined) ? (function(){return smalltalk.send(smalltalk.send(self, "_instance", []), "_destroy", []);})() : nil;
+(self['@instance']=nil);
+return smalltalk.send(self, "_start", []);
+return self;}
+}),
+smalltalk.SubWarsApp.klass);
+
+
+smalltalk.addClass('FayeClient', smalltalk.Object, ['faye', 'client'], 'SubWars-Client');
+smalltalk.addMethod(
+unescape('_initialize'),
+smalltalk.method({
+selector: unescape('initialize'),
+fn: function (){
+var self=this;
+var loc=nil;
+var url=nil;
+(self['@faye']=smalltalk.send((typeof window == 'undefined' ? nil : window), "_at_", ["Faye"]));
+smalltalk.send(smalltalk.send(self['@faye'], "_at_", ["Logging"]), "_at_put_", ["logLevel", "info"]);
+smalltalk.send(self['@faye'], "_at_put_", ["logger", (function(msg){return smalltalk.send((typeof console == 'undefined' ? nil : console), "_log_", [msg]);})]);
+(loc=smalltalk.send((typeof window == 'undefined' ? nil : window), "_location", []));
+(url=smalltalk.send(smalltalk.send(smalltalk.send((typeof location == 'undefined' ? nil : location), "_protocol", []), "__comma", [unescape("//")]), "__comma", [smalltalk.send((typeof location == 'undefined' ? nil : location), "_hostname", [])]));
+((($receiver = smalltalk.send(smalltalk.send(smalltalk.send(loc, "_port", []), "_asString", []), "__eq", [""])).klass === smalltalk.Boolean) ? (! $receiver ? (function(){return (url=smalltalk.send(smalltalk.send(url, "__comma", [":"]), "__comma", [smalltalk.send(smalltalk.send(loc, "_port", []), "_asString", [])]));})() : nil) : smalltalk.send($receiver, "_ifFalse_", [(function(){return (url=smalltalk.send(smalltalk.send(url, "__comma", [":"]), "__comma", [smalltalk.send(smalltalk.send(loc, "_port", []), "_asString", [])]));})]));
+(url=smalltalk.send(url, "__comma", [unescape("/faye")]));
+(self['@client']=smalltalk.send(smalltalk.send(self['@faye'], "_at_", ["Client"]), "_newValue_", [url]));
+smalltalk.send(self['@client'], "_bind_do_", ["transport:down", (function(){return smalltalk.send((typeof console == 'undefined' ? nil : console), "_log_", ["Transport down"]);})]);
+smalltalk.send(self['@client'], "_bind_do_", ["transport:up", (function(){return smalltalk.send((typeof console == 'undefined' ? nil : console), "_log_", ["Transport up"]);})]);
+smalltalk.send(self['@client'], "_subscribe_do_", [unescape("/chat"), (function(msg){return smalltalk.send((typeof window == 'undefined' ? nil : window), "_alert_", [msg]);})]);
+return self;}
+}),
+smalltalk.FayeClient);
+
+smalltalk.addMethod(
+unescape('_chat_'),
+smalltalk.method({
+selector: unescape('chat%3A'),
+fn: function (aString){
+var self=this;
+smalltalk.send(self['@client'], "_publish_val_", [unescape("/chat"), aString]);
+return self;}
+}),
+smalltalk.FayeClient);
+
+smalltalk.addMethod(
+unescape('_disconnect'),
+smalltalk.method({
+selector: unescape('disconnect'),
+fn: function (){
+var self=this;
+(($receiver = self['@client']) != nil && $receiver != undefined) ? (function(){return smalltalk.send(self['@client'], "_disconnect", []);})() : nil;
+return self;}
+}),
+smalltalk.FayeClient);
+
+
+
 smalltalk.addClass('Location', smalltalk.Object, ['lat', 'lng', 'precision', 'boundingMinLat', 'boundingMaxLat', 'boundingMinLng', 'boundingMaxLng', 'geoHash'], 'SubWars-Client');
 smalltalk.addMethod(
 unescape('_printString'),
@@ -261,268 +526,92 @@ return self;}
 smalltalk.Location.klass);
 
 
-smalltalk.addClass('FayeClient', smalltalk.Object, ['faye', 'client'], 'SubWars-Client');
+smalltalk.addClass('GeoHash', smalltalk.Object, [], 'SubWars-Client');
 smalltalk.addMethod(
-unescape('_initialize'),
+unescape('_generateGrid'),
 smalltalk.method({
-selector: unescape('initialize'),
+selector: unescape('generateGrid'),
 fn: function (){
 var self=this;
-var loc=nil;
-var url=nil;
-(self['@faye']=smalltalk.send((typeof window == 'undefined' ? nil : window), "_at_", ["Faye"]));
-smalltalk.send(smalltalk.send(self['@faye'], "_at_", ["Logging"]), "_at_put_", ["logLevel", "info"]);
-smalltalk.send(self['@faye'], "_at_put_", ["logger", (function(msg){return smalltalk.send((typeof console == 'undefined' ? nil : console), "_log_", [msg]);})]);
-(loc=smalltalk.send((typeof window == 'undefined' ? nil : window), "_location", []));
-(url=smalltalk.send(smalltalk.send(smalltalk.send((typeof location == 'undefined' ? nil : location), "_protocol", []), "__comma", [unescape("//")]), "__comma", [smalltalk.send((typeof location == 'undefined' ? nil : location), "_hostname", [])]));
-((($receiver = smalltalk.send(smalltalk.send(smalltalk.send(loc, "_port", []), "_asString", []), "__eq", [""])).klass === smalltalk.Boolean) ? (! $receiver ? (function(){return (url=smalltalk.send(smalltalk.send(url, "__comma", [":"]), "__comma", [smalltalk.send(smalltalk.send(loc, "_port", []), "_asString", [])]));})() : nil) : smalltalk.send($receiver, "_ifFalse_", [(function(){return (url=smalltalk.send(smalltalk.send(url, "__comma", [":"]), "__comma", [smalltalk.send(smalltalk.send(loc, "_port", []), "_asString", [])]));})]));
-(url=smalltalk.send(url, "__comma", [unescape("/faye")]));
-(self['@client']=smalltalk.send(smalltalk.send(self['@faye'], "_at_", ["Client"]), "_newValue_", [url]));
-smalltalk.send(self['@client'], "_bind_do_", ["transport:down", (function(){return smalltalk.send((typeof console == 'undefined' ? nil : console), "_log_", ["Transport down"]);})]);
-smalltalk.send(self['@client'], "_bind_do_", ["transport:up", (function(){return smalltalk.send((typeof console == 'undefined' ? nil : console), "_log_", ["Transport up"]);})]);
-smalltalk.send(self['@client'], "_subscribe_do_", [unescape("/chat"), (function(msg){return smalltalk.send((typeof window == 'undefined' ? nil : window), "_alert_", [msg]);})]);
+var str=nil;
+smalltalk.send(smalltalk.send(self, "_table", []), "_withIndexDo_", [(function(row, y){return smalltalk.send(row, "_withIndexDo_", [(function(ch, x){(str=smalltalk.send(smalltalk.send(smalltalk.send(smalltalk.send(smalltalk.send(x, "_asString", []), "__comma", [unescape("@")]), "__comma", [smalltalk.send(y, "_asString", [])]), "__comma", [" "]), "__comma", [ch]));return smalltalk.send((typeof console == 'undefined' ? nil : console), "_log_", [str]);})]);})]);
 return self;}
 }),
-smalltalk.FayeClient);
+smalltalk.GeoHash);
 
 smalltalk.addMethod(
-unescape('_chat_'),
+unescape('_table'),
 smalltalk.method({
-selector: unescape('chat%3A'),
+selector: unescape('table'),
+fn: function (){
+var self=this;
+return [["b", "c", "f", "g", "u", "v", "y", "a"], ["8", "9", "d", "e", "s", "t", "w", "x"], ["2", "3", "6", "7", "k", "m", "q", "r"], ["0", "1", "4", "5", "h", "j", "n", "p"]];
+return self;}
+}),
+smalltalk.GeoHash);
+
+smalltalk.addMethod(
+unescape('_generateGridWithPrefix_'),
+smalltalk.method({
+selector: unescape('generateGridWithPrefix%3A'),
 fn: function (aString){
 var self=this;
-smalltalk.send(self['@client'], "_publish_val_", [unescape("/chat"), aString]);
+var grid=nil;
+(grid=smalltalk.send((smalltalk.Grid || Grid), "_new", []));
+smalltalk.send(smalltalk.send(self, "_table", []), "_withIndexDo_", [(function(row, y){return smalltalk.send(row, "_withIndexDo_", [(function(ch, x){return smalltalk.send(grid, "_at_put_", [smalltalk.send(x, "__at", [y]), smalltalk.send(aString, "__comma", [ch])]);})]);})]);
+return grid;
 return self;}
 }),
-smalltalk.FayeClient);
-
-smalltalk.addMethod(
-unescape('_disconnect'),
-smalltalk.method({
-selector: unescape('disconnect'),
-fn: function (){
-var self=this;
-(($receiver = self['@client']) != nil && $receiver != undefined) ? (function(){return smalltalk.send(self['@client'], "_disconnect", []);})() : nil;
-return self;}
-}),
-smalltalk.FayeClient);
+smalltalk.GeoHash);
 
 
 
-smalltalk.addClass('SubWarsApp', smalltalk.Widget, ['div', 'client', 'geo', 'currentLocation', 'brand', 'nav', 'tools', 'map', 'polymaps', 'consoleForm'], 'SubWars-Client');
+smalltalk.addClass('Grid', smalltalk.Object, ['array'], 'SubWars-Client');
 smalltalk.addMethod(
 unescape('_initialize'),
 smalltalk.method({
 selector: unescape('initialize'),
 fn: function (){
 var self=this;
-smalltalk.send(self, "_initialize", [], smalltalk.Widget);
-(self['@client']=smalltalk.send((smalltalk.FayeClient || FayeClient), "_new", []));
-(self['@geo']=smalltalk.send((smalltalk.GeoLocation || GeoLocation), "_new", []));
-(self['@currentLocation']=smalltalk.send((smalltalk.Location || Location), "_newAtPARC", []));
-(self['@polymaps']=smalltalk.send(smalltalk.send((typeof window == 'undefined' ? nil : window), "_org", []), "_polymaps", []));
+(self['@array']=[]);
 return self;}
 }),
-smalltalk.SubWarsApp);
+smalltalk.Grid);
 
 smalltalk.addMethod(
-unescape('_pageClasses'),
+unescape('_printString'),
 smalltalk.method({
-selector: unescape('pageClasses'),
+selector: unescape('printString'),
 fn: function (){
 var self=this;
-return [(smalltalk.MapPage || MapPage)];
+return smalltalk.send(smalltalk.send(smalltalk.send(smalltalk.send(unescape("a%20Grid%28"), "__comma", [smalltalk.send((smalltalk.String || String), "_lf", [])]), "__comma", [smalltalk.send(smalltalk.send(self['@array'], "_collect_", [(function(ea){return smalltalk.send(ea, "_join_", [smalltalk.send((smalltalk.String || String), "_tab", [])]);})]), "_join_", [smalltalk.send((smalltalk.String || String), "_lf", [])])]), "__comma", [smalltalk.send((smalltalk.String || String), "_lf", [])]), "__comma", [unescape("%29")]);
 return self;}
 }),
-smalltalk.SubWarsApp);
+smalltalk.Grid);
 
 smalltalk.addMethod(
-unescape('_renderNavOn_'),
+unescape('_at_'),
 smalltalk.method({
-selector: unescape('renderNavOn%3A'),
-fn: function (html){
+selector: unescape('at%3A'),
+fn: function (aPoint){
 var self=this;
-(function($rec){smalltalk.send($rec, "_class_", [unescape("navbar%20navbar-fixed-top")]);return smalltalk.send($rec, "_with_", [(function(){return (function($rec){smalltalk.send($rec, "_class_", [unescape("navbar-inner")]);return smalltalk.send($rec, "_with_", [(function(){return (function($rec){smalltalk.send($rec, "_class_", [unescape("container-fluid")]);return smalltalk.send($rec, "_with_", [(function(){(function($rec){smalltalk.send($rec, "_class_", [unescape("btn%20btn-navbar")]);smalltalk.send($rec, "_at_put_", [unescape("data-toggle"), "collapse"]);smalltalk.send($rec, "_at_put_", [unescape("data-target"), unescape(".nav-collapse")]);return smalltalk.send($rec, "_with_", [(function(){smalltalk.send(smalltalk.send(html, "_span", []), "_class_", [unescape("icon-bar")]);smalltalk.send(smalltalk.send(html, "_span", []), "_class_", [unescape("icon-bar")]);return smalltalk.send(smalltalk.send(html, "_span", []), "_class_", [unescape("icon-bar")]);})]);})(smalltalk.send(html, "_a", []));(self['@brand']=(function($rec){smalltalk.send($rec, "_class_", ["brand"]);smalltalk.send($rec, "_href_", [unescape("%23")]);return smalltalk.send($rec, "_with_", ["SubWars"]);})(smalltalk.send(html, "_a", [])));return (function($rec){smalltalk.send($rec, "_class_", [unescape("nav-collapse")]);return smalltalk.send($rec, "_with_", [(function(){(self['@nav']=smalltalk.send(smalltalk.send(html, "_ul", []), "_class_", ["nav"]));return (self['@tools']=smalltalk.send(smalltalk.send(html, "_ul", []), "_class_", [unescape("nav%20pull-right")]));})]);})(smalltalk.send(html, "_div", []));})]);})(smalltalk.send(html, "_div", []));})]);})(smalltalk.send(html, "_div", []));})]);})(smalltalk.send(html, "_div", []));
+return smalltalk.send(smalltalk.send(self['@array'], "_at_", [smalltalk.send(aPoint, "_y", [])]), "_at_", [smalltalk.send(aPoint, "_x", [])]);
 return self;}
 }),
-smalltalk.SubWarsApp);
+smalltalk.Grid);
 
 smalltalk.addMethod(
-unescape('_updateTools'),
+unescape('_at_put_'),
 smalltalk.method({
-selector: unescape('updateTools'),
-fn: function (){
+selector: unescape('at%3Aput%3A'),
+fn: function (aPoint, anObject){
 var self=this;
-smalltalk.send(self['@tools'], "_contents_", [(function(html){return (function($rec){smalltalk.send($rec, "_class_", ["dropdown"]);return smalltalk.send($rec, "_with_", [(function(){(function($rec){smalltalk.send($rec, "_href_", [unescape("%23")]);smalltalk.send($rec, "_class_", [unescape("dropdown-toggle")]);smalltalk.send($rec, "_at_put_", [unescape("data-toggle"), "dropdown"]);return smalltalk.send($rec, "_with_", [(function(){smalltalk.send(html, "_with_", ["Tools "]);return smalltalk.send(smalltalk.send(html, "_tag_", ["b"]), "_class_", ["caret"]);})]);})(smalltalk.send(html, "_a", []));return (function($rec){smalltalk.send($rec, "_class_", [unescape("dropdown-menu")]);return smalltalk.send($rec, "_with_", [(function(){smalltalk.send(smalltalk.send(html, "_li", []), "_with_", [(function(){return (function($rec){smalltalk.send($rec, "_with_", ["Toggle IDE"]);smalltalk.send($rec, "_href_", [unescape("%23ide")]);return smalltalk.send($rec, "_onClick_", [(function(e){smalltalk.send(e, "_preventDefault", []);return smalltalk.send((typeof window == 'undefined' ? nil : window), "_toggleAmberIDE", []);})]);})(smalltalk.send(html, "_a", []));})]);smalltalk.send(smalltalk.send(html, "_li", []), "_class_", ["divider"]);smalltalk.send(smalltalk.send(html, "_li", []), "_with_", [(function(){return (function($rec){smalltalk.send($rec, "_with_", ["Browse SubWars"]);smalltalk.send($rec, "_href_", [unescape("%23browse")]);return smalltalk.send($rec, "_onClick_", [(function(e){smalltalk.send(e, "_preventDefault", []);return smalltalk.send((smalltalk.Browser || Browser), "_openOn_", [(smalltalk.SubWarsApp || SubWarsApp)]);})]);})(smalltalk.send(html, "_a", []));})]);smalltalk.send(smalltalk.send(html, "_li", []), "_with_", [(function(){return (function($rec){smalltalk.send($rec, "_with_", ["Inspect SubWars"]);smalltalk.send($rec, "_href_", [unescape("%23inspect")]);return smalltalk.send($rec, "_onClick_", [(function(e){smalltalk.send(e, "_preventDefault", []);return smalltalk.send(smalltalk.send((smalltalk.SubWarsApp || SubWarsApp), "_instance", []), "_inspect", []);})]);})(smalltalk.send(html, "_a", []));})]);return smalltalk.send(smalltalk.send(html, "_li", []), "_with_", [(function(){return (function($rec){smalltalk.send($rec, "_with_", ["Restart SubWars"]);smalltalk.send($rec, "_href_", [unescape("%23restart")]);return smalltalk.send($rec, "_onClick_", [(function(e){smalltalk.send(e, "_preventDefault", []);return smalltalk.send((smalltalk.SubWarsApp || SubWarsApp), "_restart", []);})]);})(smalltalk.send(html, "_a", []));})]);})]);})(smalltalk.send(html, "_ul", []));})]);})(smalltalk.send(html, "_li", []));})]);
+var row=nil;
+(row=smalltalk.send(self['@array'], "_at_ifAbsent_", [smalltalk.send(aPoint, "_y", []), (function(){return smalltalk.send(self['@array'], "_at_put_", [smalltalk.send(aPoint, "_y", []), []]);})]));
+smalltalk.send(row, "_at_put_", [smalltalk.send(aPoint, "_x", []), anObject]);
 return self;}
 }),
-smalltalk.SubWarsApp);
+smalltalk.Grid);
 
-smalltalk.addMethod(
-unescape('_renderOn_'),
-smalltalk.method({
-selector: unescape('renderOn%3A'),
-fn: function (html){
-var self=this;
-(self['@div']=(function($rec){smalltalk.send($rec, "_id_", ["subwars"]);return smalltalk.send($rec, "_with_", [(function(){return (function($rec){smalltalk.send($rec, "_renderNavOn_", [html]);smalltalk.send($rec, "_renderMapOn_", [html]);smalltalk.send($rec, "_update", []);return smalltalk.send($rec, "_startTracking", []);})(self);})]);})(smalltalk.send(html, "_div", [])));
-return self;}
-}),
-smalltalk.SubWarsApp);
-
-smalltalk.addMethod(
-unescape('_show'),
-smalltalk.method({
-selector: unescape('show'),
-fn: function (){
-var self=this;
-smalltalk.send(self, "_appendToJQuery_", [smalltalk.send("body", "_asJQuery", [])]);
-return self;}
-}),
-smalltalk.SubWarsApp);
-
-smalltalk.addMethod(
-unescape('_update'),
-smalltalk.method({
-selector: unescape('update'),
-fn: function (){
-var self=this;
-(function($rec){smalltalk.send($rec, "_updateNav", []);return smalltalk.send($rec, "_updateTools", []);})(self);
-return self;}
-}),
-smalltalk.SubWarsApp);
-
-smalltalk.addMethod(
-unescape('_renderMapOn_'),
-smalltalk.method({
-selector: unescape('renderMapOn%3A'),
-fn: function (html){
-var self=this;
-var svg=nil;
-smalltalk.send(smalltalk.send(html, "_div", []), "_id_", ["map"]);
-svg = document.getElementById("map").appendChild(org.polymaps.svg("svg"));
-(self['@map']=smalltalk.send(smalltalk.send(smalltalk.send(smalltalk.send((typeof window == 'undefined' ? nil : window), "_org", []), "_polymaps", []), "_map", []), "_container_", [svg]));
-smalltalk.send(self['@map'], "_zoom_", [(17)]);
-self['@map'].add(org.polymaps.image()
-		.url(org.polymaps.url("http://{S}tile.cloudmade.com"
-		+ "/4dc7790c1c744bdab4909fdb857d642d" // subwars
-		+ "/52152/256/{Z}/{X}/{Y}.png")
-		.hosts(["a.", "b.", "c.", ""])));;
-return self;}
-}),
-smalltalk.SubWarsApp);
-
-smalltalk.addMethod(
-unescape('_startTracking'),
-smalltalk.method({
-selector: unescape('startTracking'),
-fn: function (){
-var self=this;
-smalltalk.send(self['@geo'], "_watchPosition_", [(function(position){return smalltalk.send(self, "_updateLat_lng_", [smalltalk.send(smalltalk.send(position, "_coords", []), "_latitude", []), smalltalk.send(smalltalk.send(position, "_coords", []), "_longitude", [])]);})]);
-return self;}
-}),
-smalltalk.SubWarsApp);
-
-smalltalk.addMethod(
-unescape('_stopTracking'),
-smalltalk.method({
-selector: unescape('stopTracking'),
-fn: function (){
-var self=this;
-smalltalk.send(self['@geo'], "_clearWatch", []);
-return self;}
-}),
-smalltalk.SubWarsApp);
-
-smalltalk.addMethod(
-unescape('_destroy'),
-smalltalk.method({
-selector: unescape('destroy'),
-fn: function (){
-var self=this;
-(($receiver = self['@geo']) != nil && $receiver != undefined) ? (function(){return smalltalk.send(self['@geo'], "_clearWatch", []);})() : nil;
-(($receiver = self['@client']) != nil && $receiver != undefined) ? (function(){return smalltalk.send(self['@client'], "_disconnect", []);})() : nil;
-(($receiver = self['@div']) != nil && $receiver != undefined) ? (function(){return smalltalk.send(smalltalk.send(self['@div'], "_asJQuery", []), "_remove", []);})() : nil;
-return self;}
-}),
-smalltalk.SubWarsApp);
-
-smalltalk.addMethod(
-unescape('_updateNav'),
-smalltalk.method({
-selector: unescape('updateNav'),
-fn: function (){
-var self=this;
-smalltalk.send(self['@nav'], "_contents_", [(function(html){smalltalk.send(smalltalk.send(html, "_li", []), "_with_", [(function(){return (function($rec){smalltalk.send($rec, "_with_", ["IDE"]);smalltalk.send($rec, "_href_", [unescape("%23ide")]);return smalltalk.send($rec, "_onClick_", [(function(e){smalltalk.send(e, "_preventDefault", []);return smalltalk.send((smalltalk.Browser || Browser), "_openOn_", [(smalltalk.SubWarsApp || SubWarsApp)]);})]);})(smalltalk.send(html, "_a", []));})]);(self['@consoleForm']=(function($rec){smalltalk.send($rec, "_class_", [unescape("form-search%20navbar-search%20pull-left")]);return smalltalk.send($rec, "_with_", [(function(){return (function($rec){smalltalk.send($rec, "_type_", ["text"]);smalltalk.send($rec, "_id_", ["console"]);smalltalk.send($rec, "_placeholder_", ["Chat"]);return smalltalk.send($rec, "_class_", [unescape("search-query%20span1")]);})(smalltalk.send(html, "_input", []));})]);})(smalltalk.send(html, "_form", [])));return smalltalk.send(smalltalk.send(self['@consoleForm'], "_asJQuery", []), "_bind_do_", ["submit", (function(e, input){smalltalk.send(e, "_preventDefault", []);(input=smalltalk.send(unescape("%23console"), "_asJQuery", []));smalltalk.send(self, "_processConsoleCommand_", [smalltalk.send(input, "_val", [])]);return smalltalk.send(input, "_val_", [""]);})]);})]);
-return self;}
-}),
-smalltalk.SubWarsApp);
-
-smalltalk.addMethod(
-unescape('_processConsoleCommand_'),
-smalltalk.method({
-selector: unescape('processConsoleCommand%3A'),
-fn: function (aCommandString){
-var self=this;
-((($receiver = smalltalk.send(aCommandString, "_match_", [unescape("%5Egh%20")])).klass === smalltalk.Boolean) ? ($receiver ? (function(){return smalltalk.send((typeof window == 'undefined' ? nil : window), "_alert_", ["I should lookup the GeoHash you provided"]);})() : (function(){return smalltalk.send(self['@client'], "_chat_", [aCommandString]);})()) : smalltalk.send($receiver, "_ifTrue_ifFalse_", [(function(){return smalltalk.send((typeof window == 'undefined' ? nil : window), "_alert_", ["I should lookup the GeoHash you provided"]);}), (function(){return smalltalk.send(self['@client'], "_chat_", [aCommandString]);})]));
-return self;}
-}),
-smalltalk.SubWarsApp);
-
-smalltalk.addMethod(
-unescape('_updateLat_lng_'),
-smalltalk.method({
-selector: unescape('updateLat%3Alng%3A'),
-fn: function (aLat, aLng){
-var self=this;
-var loc=nil;
-var geoJson=nil;
-var coord=nil;
-(loc=smalltalk.send((smalltalk.Location || Location), "_newLat_lng_", [aLat, aLng]));
-smalltalk.send(loc, "_updateGeoHash", []);
-smalltalk.send(self['@map'], "_center_", [smalltalk.HashedCollection._fromPairs_([smalltalk.send("lat", "__minus_gt", [aLat]),smalltalk.send("lon", "__minus_gt", [aLng])])]);
-(coord=smalltalk.send((smalltalk.Array || Array), "_new_", [(5)]));
-(function($rec){smalltalk.send($rec, "_at_put_", [(1), smalltalk.send((smalltalk.Array || Array), "_with_with_", [smalltalk.send(loc, "_boundingMinLng", []), smalltalk.send(loc, "_boundingMinLat", [])])]);smalltalk.send($rec, "_at_put_", [(2), smalltalk.send((smalltalk.Array || Array), "_with_with_", [smalltalk.send(loc, "_boundingMaxLng", []), smalltalk.send(loc, "_boundingMinLat", [])])]);smalltalk.send($rec, "_at_put_", [(3), smalltalk.send((smalltalk.Array || Array), "_with_with_", [smalltalk.send(loc, "_boundingMaxLng", []), smalltalk.send(loc, "_boundingMaxLat", [])])]);smalltalk.send($rec, "_at_put_", [(4), smalltalk.send((smalltalk.Array || Array), "_with_with_", [smalltalk.send(loc, "_boundingMinLng", []), smalltalk.send(loc, "_boundingMaxLat", [])])]);return smalltalk.send($rec, "_at_put_", [(5), smalltalk.send((smalltalk.Array || Array), "_with_with_", [smalltalk.send(loc, "_boundingMinLng", []), smalltalk.send(loc, "_boundingMinLat", [])])]);})(coord);
-(geoJson=(function($rec){smalltalk.send($rec, "_features_", [smalltalk.send((smalltalk.Array || Array), "_new_", [smalltalk.HashedCollection._fromPairs_([smalltalk.send("geometry", "__minus_gt", [smalltalk.HashedCollection._fromPairs_([smalltalk.send("coordinates", "__minus_gt", [coord]),smalltalk.send("type", "__minus_gt", ["LineString"])])])])])]);return smalltalk.send($rec, "_on_do_", ["load", (function(e){return smalltalk.send(smalltalk.send(e, "_features", []), "_do_", [(function(feature){return smalltalk.send(smalltalk.send(feature, "_element", []), "_setAttribute_val_", ["style", unescape("stroke%3A%20red%3B")]);})]);})]);})(smalltalk.send(self['@polymaps'], "_geoJson", [])));
-smalltalk.send(self['@map'], "_add_", [geoJson]);
-return self;}
-}),
-smalltalk.SubWarsApp);
-
-
-smalltalk.SubWarsApp.klass.iVarNames = ['instance'];
-smalltalk.addMethod(
-unescape('_start'),
-smalltalk.method({
-selector: unescape('start'),
-fn: function (){
-var self=this;
-return (function($rec){smalltalk.send($rec, "_show", []);return smalltalk.send($rec, "_yourself", []);})(smalltalk.send(self, "_instance", []));
-return self;}
-}),
-smalltalk.SubWarsApp.klass);
-
-smalltalk.addMethod(
-unescape('_instance'),
-smalltalk.method({
-selector: unescape('instance'),
-fn: function (){
-var self=this;
-return (($receiver = self['@instance']) == nil || $receiver == undefined) ? (function(){return (self['@instance']=smalltalk.send(self, "_new", []));})() : $receiver;
-return self;}
-}),
-smalltalk.SubWarsApp.klass);
-
-smalltalk.addMethod(
-unescape('_restart'),
-smalltalk.method({
-selector: unescape('restart'),
-fn: function (){
-var self=this;
-(($receiver = smalltalk.send(self, "_instance", [])) != nil && $receiver != undefined) ? (function(){return smalltalk.send(smalltalk.send(self, "_instance", []), "_destroy", []);})() : nil;
-(self['@instance']=nil);
-return smalltalk.send(self, "_start", []);
-return self;}
-}),
-smalltalk.SubWarsApp.klass);
 
 
