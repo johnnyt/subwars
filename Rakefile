@@ -30,7 +30,22 @@ task :server do
   sh 'bundle exec foreman start'
 end
 
-desc 'Compile server'
-task :compile do
-  sh "./amber/bin/amberc -m WebServer -l ../../js/Amber-Node server"
+namespace :compile do
+  desc 'Compile server'
+  task :server do
+    sh "./amber/bin/amberc -m WebServer -l ../../js/SubWars-Node server"
+  end
+
+  desc 'Compile client'
+  task :client do
+    libs = %w[
+      ../../public/js/jquery-1.7.min ../../public/js/jquery-ui-1.8.16/jquery-ui-1.8.16.min
+      ../../public/js/bootstrap ../../public/js/polymaps.min ../../public/js/faye-browser-min
+      lib/jQuery/jquery.textarea lib/CodeMirror/codemirror lib/CodeMirror/smalltalk
+      Compiler Canvas IDE parser SUnit
+      ../../js/HTML5 ../../js/SubWars-Client ../../js/SubWars-Node
+    ].join(',')
+
+    sh "./amber/bin/amberc -m SubWarsApp -l #{libs} public/js/client"
+  end
 end

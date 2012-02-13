@@ -14,23 +14,29 @@ html(lang='en')
 
     //if lt IE 9
       script(src='http://html5shim.googlecode.com/svn/trunk/html5.js')
+    link(href='js/jquery-ui-1.8.16/jquery-ui-1.8.16.css', rel='stylesheet')
     link(href='css/bootstrap.min.css', rel='stylesheet')
     link(href='less/subwars.less', media='all', rel='stylesheet/less')
     script(src='js/less-1.1.3.min.js')
 
   body
     #includes
-      script(src='js/jquery-1.7.min.js')
-      script(src='js/bootstrap.js')
-      script(src='js/polymaps.min.js')
-      script(src='js/faye-browser-min.js')
-      script(src='amber/js/amber.js')
+      // script(src='js/jquery-1.7.min.js')
+      // script(src='js/jquery-ui-1.8.16/jquery-ui-1.8.16.min.js')
+      // script(src='js/bootstrap.js')
+      // script(src='js/polymaps.min.js')
+      // script(src='js/faye-browser-min.js')
+      // script(src='amber/js/amber.js')
+      // script
+      //   loadAmber({
+      //     packages:['HTML5','SubWars-Client','SubWars-Node','SubWars-Tests'],
+      //     prefix:'../js/packages',
+      //     ready:function(){
+      //       smalltalk.SubWarsApp._start();
+      //     }
+      //   })
 
-      script
-        loadAmber({
-          packages:['HTML5','SubWars-Client','SubWars-Node','SubWars-Tests'],
-          prefix:'../js/packages',
-          ready:function(){
-            smalltalk.SubWarsApp._start();
-          }
-        })
+      link(href='amber/js/lib/CodeMirror/codemirror.css', rel='stylesheet')
+      link(href='amber/js/lib/CodeMirror/amber.css', rel='stylesheet')
+      link(href='amber/css/amber.css', rel='stylesheet')
+      script(src='js/client.js')
