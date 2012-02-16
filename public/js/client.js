@@ -13937,6 +13937,657 @@ a,false);U=T.ownerDocument.defaultView;U.addEventListener("mousemove",m,false);U
 a.dispatch({type:"move"})}return h};return h};r.stylist=function(){function d(e){var c=e.features.length,g=h.length,k=a.length,t,n,l,i,q,w;for(q=0;q<c;++q)if(n=(t=e.features[q]).element){t=t.data;for(w=0;w<g;++w){i=(l=h[w]).value;if(typeof i==="function")i=i.call(null,t);i==null?l.name.local?n.removeAttributeNS(l.name.space,l.name.local):n.removeAttribute(l.name):l.name.local?n.setAttributeNS(l.name.space,l.name.local,i):n.setAttribute(l.name,i)}for(w=0;w<k;++w){i=(l=a[w]).value;if(typeof i==="function")i=
 i.call(null,t);i==null?n.style.removeProperty(l.name):n.style.setProperty(l.name,i,l.priority)}if(i=m){if(typeof i==="function")i=i.call(null,t);for(;n.lastChild;)n.removeChild(n.lastChild);i!=null&&n.appendChild(r.svg("title")).appendChild(document.createTextNode(i))}}}var h=[],a=[],m;d.attr=function(e,c){h.push({name:ea(e),value:c});return d};d.style=function(e,c,g){a.push({name:e,value:c,priority:arguments.length<3?null:g});return d};d.title=function(e){m=e;return d};return d}})(org.polymaps);
 if(!this.Faye)Faye={};Faye.extend=function(a,b,c){if(!b)return a;for(var d in b){if(!b.hasOwnProperty(d))continue;if(a.hasOwnProperty(d)&&c===false)continue;if(a[d]!==b[d])a[d]=b[d]}return a};Faye.extend(Faye,{VERSION:'0.8.0',BAYEUX_VERSION:'1.0',ID_LENGTH:128,JSONP_CALLBACK:'jsonpcallback',CONNECTION_TYPES:['long-polling','cross-origin-long-polling','callback-polling','websocket','in-process'],MANDATORY_CONNECTION_TYPES:['long-polling','callback-polling','in-process'],ENV:(function(){return this})(),random:function(a){a=a||this.ID_LENGTH;if(a>32){var b=Math.ceil(a/32),c='';while(b--)c+=this.random(32);return c}var d=Math.pow(2,a)-1,f=d.toString(36).length,c=Math.floor(Math.random()*d).toString(36);while(c.length<f)c='0'+c;return c},copyObject:function(a){var b,c,d;if(a instanceof Array){b=[];c=a.length;while(c--)b[c]=Faye.copyObject(a[c]);return b}else if(typeof a==='object'){b={};for(d in a)b[d]=Faye.copyObject(a[d]);return b}else{return a}},commonElement:function(a,b){for(var c=0,d=a.length;c<d;c++){if(this.indexOf(b,a[c])!==-1)return a[c]}return null},indexOf:function(a,b){for(var c=0,d=a.length;c<d;c++){if(a[c]===b)return c}return-1},each:function(a,b,c){if(a instanceof Array){for(var d=0,f=a.length;d<f;d++){if(a[d]!==undefined)b.call(c||null,a[d],d)}}else{for(var g in a){if(a.hasOwnProperty(g))b.call(c||null,g,a[g])}}},map:function(a,b,c){if(a.map)return a.map(b,c);var d=[];this.each(a,function(){d.push(b.apply(c||null,arguments))});return d},filter:function(a,b,c){var d=[];this.each(a,function(){if(b.apply(c,arguments))d.push(arguments[0])});return d},size:function(a){var b=0;this.each(a,function(){b+=1});return b},enumEqual:function(c,d){if(d instanceof Array){if(!(c instanceof Array))return false;var f=c.length;if(f!==d.length)return false;while(f--){if(c[f]!==d[f])return false}return true}else{if(!(c instanceof Object))return false;if(this.size(d)!==this.size(c))return false;var g=true;this.each(c,function(a,b){g=g&&(d[a]===b)});return g}},asyncEach:function(a,b,c,d){var f=a.length,g=-1,i=0,h=false;var j=function(){i-=1;g+=1;if(g===f)return c&&c.call(d);b(a[g],m)};var k=function(){if(h)return;h=true;while(i>0)j();h=false};var m=function(){i+=1;k()};m()},toJSON:function(a){if(this.stringify)return this.stringify(a,function(key,value){return(this[key]instanceof Array)?this[key]:value});return JSON.stringify(a)},timestamp:function(){var b=new Date(),c=b.getFullYear(),d=b.getMonth()+1,f=b.getDate(),g=b.getHours(),i=b.getMinutes(),h=b.getSeconds();var j=function(a){return a<10?'0'+a:String(a)};return j(c)+'-'+j(d)+'-'+j(f)+' '+j(g)+':'+j(i)+':'+j(h)}});Faye.Class=function(a,b){if(typeof a!=='function'){b=a;a=Object}var c=function(){if(!this.initialize)return this;return this.initialize.apply(this,arguments)||this};var d=function(){};d.prototype=a.prototype;c.prototype=new d();Faye.extend(c.prototype,b);return c};Faye.Namespace=Faye.Class({initialize:function(){this._d={}},exists:function(a){return this._d.hasOwnProperty(a)},generate:function(){var a=Faye.random();while(this._d.hasOwnProperty(a))a=Faye.random();return this._d[a]=a},release:function(a){delete this._d[a]}});Faye.Error=Faye.Class({initialize:function(a,b,c){this.code=a;this.params=Array.prototype.slice.call(b);this.message=c},toString:function(){return this.code+':'+this.params.join(',')+':'+this.message}});Faye.Error.parse=function(a){a=a||'';if(!Faye.Grammar.ERROR.test(a))return new this(null,[],a);var b=a.split(':'),c=parseInt(b[0]),d=b[1].split(','),a=b[2];return new this(c,d,a)};Faye.Error.versionMismatch=function(){return new this(300,arguments,"Version mismatch").toString()};Faye.Error.conntypeMismatch=function(){return new this(301,arguments,"Connection types not supported").toString()};Faye.Error.extMismatch=function(){return new this(302,arguments,"Extension mismatch").toString()};Faye.Error.badRequest=function(){return new this(400,arguments,"Bad request").toString()};Faye.Error.clientUnknown=function(){return new this(401,arguments,"Unknown client").toString()};Faye.Error.parameterMissing=function(){return new this(402,arguments,"Missing required parameter").toString()};Faye.Error.channelForbidden=function(){return new this(403,arguments,"Forbidden channel").toString()};Faye.Error.channelUnknown=function(){return new this(404,arguments,"Unknown channel").toString()};Faye.Error.channelInvalid=function(){return new this(405,arguments,"Invalid channel").toString()};Faye.Error.extUnknown=function(){return new this(406,arguments,"Unknown extension").toString()};Faye.Error.publishFailed=function(){return new this(407,arguments,"Failed to publish").toString()};Faye.Error.serverError=function(){return new this(500,arguments,"Internal server error").toString()};Faye.Deferrable={callback:function(a,b){if(!a)return;if(this._v==='succeeded')return a.apply(b,this._k);this._l=this._l||[];this._l.push([a,b])},timeout:function(a,b){var c=this;var d=Faye.ENV.setTimeout(function(){c.setDeferredStatus('failed',b)},a*1000);this._w=d},errback:function(a,b){if(!a)return;if(this._v==='failed')return a.apply(b,this._k);this._m=this._m||[];this._m.push([a,b])},setDeferredStatus:function(){if(this._w)Faye.ENV.clearTimeout(this._w);var a=Array.prototype.slice.call(arguments),b=a.shift(),c;this._v=b;this._k=a;if(b==='succeeded')c=this._l;else if(b==='failed')c=this._m;if(!c)return;var d;while(d=c.shift())d[0].apply(d[1],this._k)}};Faye.Publisher={countListeners:function(a){if(!this._3||!this._3[a])return 0;return this._3[a].length},bind:function(a,b,c){this._3=this._3||{};var d=this._3[a]=this._3[a]||[];d.push([b,c])},unbind:function(a,b,c){if(!this._3||!this._3[a])return;if(!b){delete this._3[a];return}var d=this._3[a],f=d.length;while(f--){if(b!==d[f][0])continue;if(c&&d[f][1]!==c)continue;d.splice(f,1)}},trigger:function(){var b=Array.prototype.slice.call(arguments),c=b.shift();if(!this._3||!this._3[c])return;Faye.each(this._3[c],function(a){a[0].apply(a[1],b)})}};Faye.Timeouts={addTimeout:function(a,b,c,d){this._4=this._4||{};if(this._4.hasOwnProperty(a))return;var f=this;this._4[a]=Faye.ENV.setTimeout(function(){delete f._4[a];c.call(d)},1000*b)},removeTimeout:function(a){this._4=this._4||{};var b=this._4[a];if(!b)return;clearTimeout(b);delete this._4[a]}};Faye.Logging={LOG_LEVELS:{error:3,warn:2,info:1,debug:0},logLevel:'error',log:function(a,b){if(!Faye.logger)return;var c=Faye.Logging.LOG_LEVELS;if(c[Faye.Logging.logLevel]>c[b])return;var a=Array.prototype.slice.apply(a),d=' ['+b.toUpperCase()+'] [Faye',f=this.className,g=a.shift().replace(/\?/g,function(){try{return Faye.toJSON(a.shift())}catch(e){return'[Object]'}});for(var i in Faye){if(f)continue;if(typeof Faye[i]!=='function')continue;if(this instanceof Faye[i])f=i}if(f)d+='.'+f;d+='] ';Faye.logger(Faye.timestamp()+d+g)}};Faye.each(Faye.Logging.LOG_LEVELS,function(a,b){Faye.Logging[a]=function(){this.log(arguments,a)}});Faye.Grammar={LOWALPHA:/^[a-z]$/,UPALPHA:/^[A-Z]$/,ALPHA:/^([a-z]|[A-Z])$/,DIGIT:/^[0-9]$/,ALPHANUM:/^(([a-z]|[A-Z])|[0-9])$/,MARK:/^(\-|\_|\!|\~|\(|\)|\$|\@)$/,STRING:/^(((([a-z]|[A-Z])|[0-9])|(\-|\_|\!|\~|\(|\)|\$|\@)| |\/|\*|\.))*$/,TOKEN:/^(((([a-z]|[A-Z])|[0-9])|(\-|\_|\!|\~|\(|\)|\$|\@)))+$/,INTEGER:/^([0-9])+$/,CHANNEL_SEGMENT:/^(((([a-z]|[A-Z])|[0-9])|(\-|\_|\!|\~|\(|\)|\$|\@)))+$/,CHANNEL_SEGMENTS:/^(((([a-z]|[A-Z])|[0-9])|(\-|\_|\!|\~|\(|\)|\$|\@)))+(\/(((([a-z]|[A-Z])|[0-9])|(\-|\_|\!|\~|\(|\)|\$|\@)))+)*$/,CHANNEL_NAME:/^\/(((([a-z]|[A-Z])|[0-9])|(\-|\_|\!|\~|\(|\)|\$|\@)))+(\/(((([a-z]|[A-Z])|[0-9])|(\-|\_|\!|\~|\(|\)|\$|\@)))+)*$/,WILD_CARD:/^\*{1,2}$/,CHANNEL_PATTERN:/^(\/(((([a-z]|[A-Z])|[0-9])|(\-|\_|\!|\~|\(|\)|\$|\@)))+)*\/\*{1,2}$/,VERSION_ELEMENT:/^(([a-z]|[A-Z])|[0-9])(((([a-z]|[A-Z])|[0-9])|\-|\_))*$/,VERSION:/^([0-9])+(\.(([a-z]|[A-Z])|[0-9])(((([a-z]|[A-Z])|[0-9])|\-|\_))*)*$/,CLIENT_ID:/^((([a-z]|[A-Z])|[0-9]))+$/,ID:/^((([a-z]|[A-Z])|[0-9]))+$/,ERROR_MESSAGE:/^(((([a-z]|[A-Z])|[0-9])|(\-|\_|\!|\~|\(|\)|\$|\@)| |\/|\*|\.))*$/,ERROR_ARGS:/^(((([a-z]|[A-Z])|[0-9])|(\-|\_|\!|\~|\(|\)|\$|\@)| |\/|\*|\.))*(,(((([a-z]|[A-Z])|[0-9])|(\-|\_|\!|\~|\(|\)|\$|\@)| |\/|\*|\.))*)*$/,ERROR_CODE:/^[0-9][0-9][0-9]$/,ERROR:/^([0-9][0-9][0-9]:(((([a-z]|[A-Z])|[0-9])|(\-|\_|\!|\~|\(|\)|\$|\@)| |\/|\*|\.))*(,(((([a-z]|[A-Z])|[0-9])|(\-|\_|\!|\~|\(|\)|\$|\@)| |\/|\*|\.))*)*:(((([a-z]|[A-Z])|[0-9])|(\-|\_|\!|\~|\(|\)|\$|\@)| |\/|\*|\.))*|[0-9][0-9][0-9]::(((([a-z]|[A-Z])|[0-9])|(\-|\_|\!|\~|\(|\)|\$|\@)| |\/|\*|\.))*)$/};Faye.Extensible={addExtension:function(a){this._5=this._5||[];this._5.push(a);if(a.added)a.added(this)},removeExtension:function(a){if(!this._5)return;var b=this._5.length;while(b--){if(this._5[b]!==a)continue;this._5.splice(b,1);if(a.removed)a.removed(this)}},pipeThroughExtensions:function(c,d,f,g){this.debug('Passing through ? extensions: ?',c,d);if(!this._5)return f.call(g,d);var i=this._5.slice();var h=function(a){if(!a)return f.call(g,a);var b=i.shift();if(!b)return f.call(g,a);if(b[c])b[c](a,h);else h(a)};h(d)}};Faye.extend(Faye.Extensible,Faye.Logging);Faye.Channel=Faye.Class({initialize:function(a){this.id=this.name=a},push:function(a){this.trigger('message',a)},isUnused:function(){return this.countListeners('message')===0}});Faye.extend(Faye.Channel.prototype,Faye.Publisher);Faye.extend(Faye.Channel,{HANDSHAKE:'/meta/handshake',CONNECT:'/meta/connect',SUBSCRIBE:'/meta/subscribe',UNSUBSCRIBE:'/meta/unsubscribe',DISCONNECT:'/meta/disconnect',META:'meta',SERVICE:'service',expand:function(a){var b=this.parse(a),c=['/**',a];var d=b.slice();d[d.length-1]='*';c.push(this.unparse(d));for(var f=1,g=b.length;f<g;f++){d=b.slice(0,f);d.push('**');c.push(this.unparse(d))}return c},isValid:function(a){return Faye.Grammar.CHANNEL_NAME.test(a)||Faye.Grammar.CHANNEL_PATTERN.test(a)},parse:function(a){if(!this.isValid(a))return null;return a.split('/').slice(1)},unparse:function(a){return'/'+a.join('/')},isMeta:function(a){var b=this.parse(a);return b?(b[0]===this.META):null},isService:function(a){var b=this.parse(a);return b?(b[0]===this.SERVICE):null},isSubscribable:function(a){if(!this.isValid(a))return null;return!this.isMeta(a)&&!this.isService(a)},Set:Faye.Class({initialize:function(){this._2={}},getKeys:function(){var c=[];Faye.each(this._2,function(a,b){c.push(a)});return c},remove:function(a){delete this._2[a]},hasSubscription:function(a){return this._2.hasOwnProperty(a)},subscribe:function(c,d,f){if(!d)return;Faye.each(c,function(a){var b=this._2[a]=this._2[a]||new Faye.Channel(a);b.bind('message',d,f)},this)},unsubscribe:function(a,b,c){var d=this._2[a];if(!d)return false;d.unbind('message',b,c);if(d.isUnused()){this.remove(a);return true}else{return false}},distributeMessage:function(c){var d=Faye.Channel.expand(c.channel);Faye.each(d,function(a){var b=this._2[a];if(b)b.trigger('message',c.data)},this)}})});Faye.Publication=Faye.Class(Faye.Deferrable);Faye.Subscription=Faye.Class({initialize:function(a,b,c,d){this._8=a;this._2=b;this._n=c;this._o=d;this._x=false},cancel:function(){if(this._x)return;this._8.unsubscribe(this._2,this._n,this._o);this._x=true},unsubscribe:function(){this.cancel()}});Faye.extend(Faye.Subscription.prototype,Faye.Deferrable);Faye.Client=Faye.Class({UNCONNECTED:1,CONNECTING:2,CONNECTED:3,DISCONNECTED:4,HANDSHAKE:'handshake',RETRY:'retry',NONE:'none',CONNECTION_TIMEOUT:60.0,DEFAULT_ENDPOINT:'/bayeux',INTERVAL:0.0,initialize:function(a,b){this.info('New client created for ?',a);this.endpoint=a||this.DEFAULT_ENDPOINT;this._y=b||{};this._p=[];this._z(Faye.MANDATORY_CONNECTION_TYPES);this._1=this.UNCONNECTED;this._2=new Faye.Channel.Set();this._e=0;this._q={};this._6={reconnect:this.RETRY,interval:1000*(this._y.interval||this.INTERVAL),timeout:1000*(this._y.timeout||this.CONNECTION_TIMEOUT)};if(Faye.Event)Faye.Event.on(Faye.ENV,'beforeunload',function(){if(Faye.indexOf(this._p,'autodisconnect')<0)this.disconnect()},this)},disable:function(a){this._p.push(a)},getClientId:function(){return this._0},getState:function(){switch(this._1){case this.UNCONNECTED:return'UNCONNECTED';case this.CONNECTING:return'CONNECTING';case this.CONNECTED:return'CONNECTED';case this.DISCONNECTED:return'DISCONNECTED'}},handshake:function(f,g){if(this._6.reconnect===this.NONE)return;if(this._1!==this.UNCONNECTED)return;this._1=this.CONNECTING;var i=this;this.info('Initiating handshake with ?',this.endpoint);this._9({channel:Faye.Channel.HANDSHAKE,version:Faye.BAYEUX_VERSION,supportedConnectionTypes:[this._f.connectionType]},function(c){if(c.successful){this._1=this.CONNECTED;this._0=c.clientId;var d=c.supportedConnectionTypes;Faye.each(this._p,function(a){var b=Faye.indexOf(d,a);if(b>=0)d.splice(b,1)},this);this._z(d);this.info('Handshake successful: ?',this._0);this.subscribe(this._2.getKeys(),true);if(f)f.call(g)}else{this.info('Handshake unsuccessful');Faye.ENV.setTimeout(function(){i.handshake(f,g)},this._6.interval);this._1=this.UNCONNECTED}},this)},connect:function(a,b){if(this._6.reconnect===this.NONE)return;if(this._1===this.DISCONNECTED)return;if(this._1===this.UNCONNECTED)return this.handshake(function(){this.connect(a,b)},this);this.callback(a,b);if(this._1!==this.CONNECTED)return;this.info('Calling deferred actions for ?',this._0);this.setDeferredStatus('succeeded');this.setDeferredStatus('deferred');if(this._r)return;this._r=true;this.info('Initiating connection for ?',this._0);this._9({channel:Faye.Channel.CONNECT,clientId:this._0,connectionType:this._f.connectionType},this._A,this)},disconnect:function(){if(this._1!==this.CONNECTED)return;this._1=this.DISCONNECTED;this.info('Disconnecting ?',this._0);this._9({channel:Faye.Channel.DISCONNECT,clientId:this._0},function(a){if(a.successful)this._f.close()},this);this.info('Clearing channel listeners for ?',this._0);this._2=new Faye.Channel.Set()},subscribe:function(c,d,f){if(c instanceof Array)return Faye.each(c,function(channel){this.subscribe(channel,d,f)},this);var g=new Faye.Subscription(this,c,d,f);var i=(d===true);if(!i&&this._2.hasSubscription(c)){this._2.subscribe([c],d,f);g.setDeferredStatus('succeeded');return g}this.connect(function(){this.info('Client ? attempting to subscribe to ?',this._0,c);this._9({channel:Faye.Channel.SUBSCRIBE,clientId:this._0,subscription:c},function(a){if(!a.successful)return g.setDeferredStatus('failed',Faye.Error.parse(a.error));var b=[].concat(a.subscription);this.info('Subscription acknowledged for ? to ?',this._0,b);if(!i)this._2.subscribe(b,d,f);g.setDeferredStatus('succeeded')},this)},this);return g},unsubscribe:function(c,d,f){if(c instanceof Array)return Faye.each(c,function(channel){this.unsubscribe(channel,d,f)},this);var g=this._2.unsubscribe(c,d,f);if(!g)return;this.connect(function(){this.info('Client ? attempting to unsubscribe from ?',this._0,c);this._9({channel:Faye.Channel.UNSUBSCRIBE,clientId:this._0,subscription:c},function(a){if(!a.successful)return;var b=[].concat(a.subscription);this.info('Unsubscription acknowledged for ? from ?',this._0,b)},this)},this)},publish:function(b,c){if(!Faye.Grammar.CHANNEL_NAME.test(b))throw new Error("Cannot publish: '"+b+"' is not a valid channel name");var d=new Faye.Publication();this.connect(function(){this.info('Client ? queueing published message to ?: ?',this._0,b,c);this._9({channel:b,data:c,clientId:this._0},function(a){if(a.successful)d.setDeferredStatus('succeeded');else d.setDeferredStatus('failed',Faye.Error.parse(a.error))},this)},this);return d},receiveMessage:function(c){this.pipeThroughExtensions('incoming',c,function(a){if(!a)return;if(a.advice)this._E(a.advice);var b=this._q[a.id];if(b){delete this._q[a.id];b[0].call(b[1],a)}this._F(a)},this)},_z:function(b){Faye.Transport.get(this,b,function(a){this._f=a;a.bind('down',function(){if(this._c!==undefined&&!this._c)return;this._c=false;this.trigger('transport:down')},this);a.bind('up',function(){if(this._c!==undefined&&this._c)return;this._c=true;this.trigger('transport:up')},this)},this)},_9:function(b,c,d){b.id=this._G();if(c)this._q[b.id]=[c,d];this.pipeThroughExtensions('outgoing',b,function(a){if(!a)return;this._f.send(a,this._6.timeout/1000)},this)},_G:function(){this._e+=1;if(this._e>=Math.pow(2,32))this._e=0;return this._e.toString(36)},_E:function(a){Faye.extend(this._6,a);if(this._6.reconnect===this.HANDSHAKE&&this._1!==this.DISCONNECTED){this._1=this.UNCONNECTED;this._0=null;this._A()}},_F:function(a){if(!a.channel||a.data===undefined)return;this.info('Client ? calling listeners for ? with ?',this._0,a.channel,a.data);this._2.distributeMessage(a)},_H:function(){if(!this._r)return;this._r=null;this.info('Closed connection for ?',this._0)},_A:function(){this._H();var a=this;Faye.ENV.setTimeout(function(){a.connect()},this._6.interval)}});Faye.extend(Faye.Client.prototype,Faye.Deferrable);Faye.extend(Faye.Client.prototype,Faye.Publisher);Faye.extend(Faye.Client.prototype,Faye.Logging);Faye.extend(Faye.Client.prototype,Faye.Extensible);Faye.Transport=Faye.extend(Faye.Class({MAX_DELAY:0.0,batching:true,initialize:function(a,b){this.debug('Created new ? transport for ?',this.connectionType,b);this._8=a;this._a=b;this._g=[]},close:function(){},send:function(a,b){this.debug('Client ? sending message to ?: ?',this._8._0,this._a,a);if(!this.batching)return this.request([a],b);this._g.push(a);this._b=b;if(a.channel===Faye.Channel.HANDSHAKE)return this.flush();if(a.channel===Faye.Channel.CONNECT)this._s=a;this.addTimeout('publish',this.MAX_DELAY,this.flush,this)},flush:function(){this.removeTimeout('publish');if(this._g.length>1&&this._s)this._s.advice={timeout:0};this.request(this._g,this._b);this._s=null;this._g=[]},receive:function(a){this.debug('Client ? received from ?: ?',this._8._0,this._a,a);Faye.each(a,this._8.receiveMessage,this._8)},retry:function(a,b){var c=this,d=false;return function(){if(d)return;d=true;Faye.ENV.setTimeout(function(){c.request(a,2*b)},1000*b)}}}),{get:function(g,i,h,j){var k=g.endpoint;if(i===undefined)i=this.supportedConnectionTypes();Faye.asyncEach(this._t,function(b,c){var d=b[0],f=b[1];if(Faye.indexOf(i,d)<0)return c();f.isUsable(k,function(a){if(a)h.call(j,new f(g,k));else c()})},function(){throw new Error('Could not find a usable connection type for '+k);})},register:function(a,b){this._t.push([a,b]);b.prototype.connectionType=a},_t:[],supportedConnectionTypes:function(){return Faye.map(this._t,function(a){return a[0]})}});Faye.extend(Faye.Transport.prototype,Faye.Logging);Faye.extend(Faye.Transport.prototype,Faye.Publisher);Faye.extend(Faye.Transport.prototype,Faye.Timeouts);Faye.Event={_h:[],on:function(a,b,c,d){var f=function(){c.call(d)};if(a.addEventListener)a.addEventListener(b,f,false);else a.attachEvent('on'+b,f);this._h.push({_i:a,_u:b,_n:c,_o:d,_B:f})},detach:function(a,b,c,d){var f=this._h.length,g;while(f--){g=this._h[f];if((a&&a!==g._i)||(b&&b!==g._u)||(c&&c!==g._n)||(d&&d!==g._o))continue;if(g._i.removeEventListener)g._i.removeEventListener(g._u,g._B,false);else g._i.detachEvent('on'+g._u,g._B);this._h.splice(f,1);g=null}}};Faye.Event.on(Faye.ENV,'unload',Faye.Event.detach,Faye.Event);Faye.URI=Faye.extend(Faye.Class({queryString:function(){var c=[],d;Faye.each(this.params,function(a,b){c.push(encodeURIComponent(a)+'='+encodeURIComponent(b))});return c.join('&')},isLocal:function(){var a=Faye.URI.parse(Faye.ENV.location.href);var b=(a.hostname!==this.hostname)||(a.port!==this.port)||(a.protocol!==this.protocol);return!b},toURL:function(){var a=this.queryString();return this.protocol+this.hostname+':'+this.port+this.pathname+(a?'?'+a:'')}}),{parse:function(d,f){if(typeof d!=='string')return d;var g=new this();var i=function(b,c){d=d.replace(c,function(a){if(a)g[b]=a;return''})};i('protocol',/^https?\:\/+/);i('hostname',/^[^\/\:]+/);i('port',/^:[0-9]+/);Faye.extend(g,{protocol:Faye.ENV.location.protocol+'//',hostname:Faye.ENV.location.hostname,port:Faye.ENV.location.port},false);if(!g.port)g.port=(g.protocol==='https://')?'443':'80';g.port=g.port.replace(/\D/g,'');var h=d.split('?'),j=h.shift(),k=h.join('?'),m=k?k.split('&'):[],n=m.length,l={};while(n--){h=m[n].split('=');l[decodeURIComponent(h[0]||'')]=decodeURIComponent(h[1]||'')}if(typeof f==='object')Faye.extend(l,f);g.pathname=j;g.params=l;return g}});if(!this.JSON){JSON={}}(function(){function k(a){return a<10?'0'+a:a}if(typeof Date.prototype.toJSON!=='function'){Date.prototype.toJSON=function(a){return this.getUTCFullYear()+'-'+k(this.getUTCMonth()+1)+'-'+k(this.getUTCDate())+'T'+k(this.getUTCHours())+':'+k(this.getUTCMinutes())+':'+k(this.getUTCSeconds())+'Z'};String.prototype.toJSON=Number.prototype.toJSON=Boolean.prototype.toJSON=function(a){return this.valueOf()}}var m=/[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,n=/[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,l,p,s={'\b':'\\b','\t':'\\t','\n':'\\n','\f':'\\f','\r':'\\r','"':'\\"','\\':'\\\\'},o;function r(c){n.lastIndex=0;return n.test(c)?'"'+c.replace(n,function(a){var b=s[a];return typeof b==='string'?b:'\\u'+('0000'+a.charCodeAt(0).toString(16)).slice(-4)})+'"':'"'+c+'"'}function q(a,b){var c,d,f,g,i=l,h,j=b[a];if(j&&typeof j==='object'&&typeof j.toJSON==='function'){j=j.toJSON(a)}if(typeof o==='function'){j=o.call(b,a,j)}switch(typeof j){case'string':return r(j);case'number':return isFinite(j)?String(j):'null';case'boolean':case'null':return String(j);case'object':if(!j){return'null'}l+=p;h=[];if(Object.prototype.toString.apply(j)==='[object Array]'){g=j.length;for(c=0;c<g;c+=1){h[c]=q(c,j)||'null'}f=h.length===0?'[]':l?'[\n'+l+h.join(',\n'+l)+'\n'+i+']':'['+h.join(',')+']';l=i;return f}if(o&&typeof o==='object'){g=o.length;for(c=0;c<g;c+=1){d=o[c];if(typeof d==='string'){f=q(d,j);if(f){h.push(r(d)+(l?': ':':')+f)}}}}else{for(d in j){if(Object.hasOwnProperty.call(j,d)){f=q(d,j);if(f){h.push(r(d)+(l?': ':':')+f)}}}}f=h.length===0?'{}':l?'{\n'+l+h.join(',\n'+l)+'\n'+i+'}':'{'+h.join(',')+'}';l=i;return f}}Faye.stringify=function(a,b,c){var d;l='';p='';if(typeof c==='number'){for(d=0;d<c;d+=1){p+=' '}}else if(typeof c==='string'){p=c}o=b;if(b&&typeof b!=='function'&&(typeof b!=='object'||typeof b.length!=='number')){throw new Error('JSON.stringify');}return q('',{'':a})};if(typeof JSON.stringify!=='function'){JSON.stringify=Faye.stringify}if(typeof JSON.parse!=='function'){JSON.parse=function(g,i){var h;function j(a,b){var c,d,f=a[b];if(f&&typeof f==='object'){for(c in f){if(Object.hasOwnProperty.call(f,c)){d=j(f,c);if(d!==undefined){f[c]=d}else{delete f[c]}}}}return i.call(a,b,f)}m.lastIndex=0;if(m.test(g)){g=g.replace(m,function(a){return'\\u'+('0000'+a.charCodeAt(0).toString(16)).slice(-4)})}if(/^[\],:{}\s]*$/.test(g.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g,'@').replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g,']').replace(/(?:^|:|,)(?:\s*\[)+/g,''))){h=eval('('+g+')');return typeof i==='function'?j({'':h},''):h}throw new SyntaxError('JSON.parse');}}}());Faye.Transport.WebSocket=Faye.extend(Faye.Class(Faye.Transport,{UNCONNECTED:1,CONNECTING:2,CONNECTED:3,batching:false,request:function(b,c){this._b=c||this._b;this._j=this._j||{};Faye.each(b,function(a){this._j[a.id]=a},this);this.withSocket(function(a){a.send(Faye.toJSON(b))})},withSocket:function(a,b){this.callback(a,b);this.connect()},close:function(){if(this._C)return;this._C=true;if(this._7)this._7.close()},connect:function(){if(this._C)return;this._1=this._1||this.UNCONNECTED;if(this._1!==this.UNCONNECTED)return;this._1=this.CONNECTING;var d=Faye.Transport.WebSocket.getClass();this._7=new d(Faye.Transport.WebSocket.getSocketUrl(this._a));var f=this;this._7.onopen=function(){f._1=f.CONNECTED;f.setDeferredStatus('succeeded',f._7);f.trigger('up')};this._7.onmessage=function(b){var c=[].concat(JSON.parse(b.data));Faye.each(c,function(a){delete f._j[a.id]});f.receive(c)};this._7.onclose=function(){var a=(f._1===f.CONNECTED);f.setDeferredStatus('deferred');f._1=f.UNCONNECTED;delete f._7;if(a)return f.resend();Faye.ENV.setTimeout(function(){f.connect()},1000*f._b);f._b=f._b*2;f.trigger('down')}},resend:function(){var c=Faye.map(this._j,function(a,b){return b});this.request(c)}}),{WEBSOCKET_TIMEOUT:1000,getSocketUrl:function(a){if(Faye.URI)a=Faye.URI.parse(a).toURL();return a.replace(/^http(s?):/ig,'ws$1:')},getClass:function(){if(Faye.WebSocket)return Faye.WebSocket.Client;return Faye.ENV.WebSocket||Faye.ENV.MozWebSocket},isUsable:function(a,b,c){var d=this.getClass();if(!d)return b.call(c,false);var f=false,g=false,i=this.getSocketUrl(a),h=new d(i);h.onopen=function(){f=true;h.close();b.call(c,true);g=true;h=null};var j=function(){if(!g&&!f)b.call(c,false);g=true};h.onclose=h.onerror=j;Faye.ENV.setTimeout(j,this.WEBSOCKET_TIMEOUT)}});Faye.extend(Faye.Transport.WebSocket.prototype,Faye.Deferrable);Faye.Transport.register('websocket',Faye.Transport.WebSocket);Faye.Transport.XHR=Faye.extend(Faye.Class(Faye.Transport,{request:function(c,d){var f=this.retry(c,d),g=Faye.URI.parse(this._a).pathname,i=this,h=Faye.ENV.ActiveXObject?new ActiveXObject("Microsoft.XMLHTTP"):new XMLHttpRequest();h.open('POST',g,true);h.setRequestHeader('Content-Type','application/json');h.setRequestHeader('X-Requested-With','XMLHttpRequest');h.onreadystatechange=function(){if(h.readyState!==4)return;var a=h.status;try{var b;if((a>=200&&a<300)||a===304||a===1223){try{b=JSON.parse(h.responseText)}catch(e){}}if(b){i.receive(b);i.trigger('up')}else{f();i.trigger('down')}}catch(e){f()}finally{Faye.Event.detach(Faye.ENV,'beforeunload',j);h.onreadystatechange=function(){};h=null}};var j=function(){h.abort()};Faye.Event.on(Faye.ENV,'beforeunload',j);h.send(Faye.toJSON(c))}}),{isUsable:function(a,b,c){b.call(c,Faye.URI.parse(a).isLocal())}});Faye.Transport.register('long-polling',Faye.Transport.XHR);Faye.Transport.CORS=Faye.extend(Faye.Class(Faye.Transport,{request:function(a,b){var c=Faye.ENV.XDomainRequest?XDomainRequest:XMLHttpRequest,d=new c(),f=this.retry(a,b),g=this;d.open('POST',this._a,true);var i=function(){if(!d)return false;d.onload=d.onerror=d.ontimeout=d.onprogress=null;d=null;Faye.ENV.clearTimeout(j);return true};d.onload=function(){try{g.receive(JSON.parse(d.responseText));g.trigger('up')}catch(e){f()}finally{i()}};var h=function(){i();f();g.trigger('down')};var j=Faye.ENV.setTimeout(h,1.5*1000*b);d.onerror=h;d.ontimeout=h;d.onprogress=function(){};d.send('message='+encodeURIComponent(Faye.toJSON(a)))}}),{isUsable:function(a,b,c){if(Faye.URI.parse(a).isLocal())return b.call(c,false);if(Faye.ENV.XDomainRequest)return b.call(c,true);if(Faye.ENV.XMLHttpRequest){var d=new Faye.ENV.XMLHttpRequest();return b.call(c,d.withCredentials!==undefined)}return b.call(c,false)}});Faye.Transport.register('cross-origin-long-polling',Faye.Transport.CORS);Faye.Transport.JSONP=Faye.extend(Faye.Class(Faye.Transport,{request:function(b,c){var d={message:Faye.toJSON(b)},f=document.getElementsByTagName('head')[0],g=document.createElement('script'),i=Faye.Transport.JSONP.getCallbackName(),h=Faye.URI.parse(this._a,d),j=this.retry(b,c),k=this;Faye.ENV[i]=function(a){n();k.receive(a);k.trigger('up')};var m=Faye.ENV.setTimeout(function(){n();j();k.trigger('down')},1.5*1000*c);var n=function(){if(!Faye.ENV[i])return false;Faye.ENV[i]=undefined;try{delete Faye.ENV[i]}catch(e){}Faye.ENV.clearTimeout(m);g.parentNode.removeChild(g);return true};h.params.jsonp=i;g.type='text/javascript';g.src=h.toURL();f.appendChild(g)}}),{_D:0,getCallbackName:function(){this._D+=1;return'__jsonp'+this._D+'__'},isUsable:function(a,b,c){b.call(c,true)}});Faye.Transport.register('callback-polling',Faye.Transport.JSONP);/*
+  Copyright 2010 Google Inc.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+*/
+
+/**
+ * @fileoverview Bookmark bubble library. This is meant to be included in the
+ * main JavaScript binary of a mobile web application.
+ *
+ * Supported browsers: iPhone / iPod / iPad Safari 3.0+
+ */
+
+var google = google || {};
+google.bookmarkbubble = google.bookmarkbubble || {};
+
+
+/**
+ * Binds a context object to the function.
+ * @param {Function} fn The function to bind to.
+ * @param {Object} context The "this" object to use when the function is run.
+ * @return {Function} A partially-applied form of fn.
+ */
+google.bind = function(fn, context) {
+  return function() {
+    return fn.apply(context, arguments);
+  };
+};
+
+
+/**
+ * Function used to define an abstract method in a base class. If a subclass
+ * fails to override the abstract method, then an error will be thrown whenever
+ * that method is invoked.
+ */
+google.abstractMethod = function() {
+  throw Error('Unimplemented abstract method.');
+};
+
+
+
+/**
+ * The bubble constructor. Instantiating an object does not cause anything to
+ * be rendered yet, so if necessary you can set instance properties before
+ * showing the bubble.
+ * @constructor
+ */
+google.bookmarkbubble.Bubble = function() {
+  /**
+   * Handler for the scroll event. Keep a reference to it here, so it can be
+   * unregistered when the bubble is destroyed.
+   * @type {function()}
+   * @private
+   */
+  this.boundScrollHandler_ = google.bind(this.setPosition, this);
+
+  /**
+   * The bubble element.
+   * @type {Element}
+   * @private
+   */
+  this.element_ = null;
+
+  /**
+   * Whether the bubble has been destroyed.
+   * @type {boolean}
+   * @private
+   */
+  this.hasBeenDestroyed_ = false;
+};
+
+
+/**
+ * Shows the bubble if allowed. It is not allowed if:
+ * - The browser is not Mobile Safari, or
+ * - The user has dismissed it too often already, or
+ * - The hash parameter is present in the location hash, or
+ * - The application is in fullscreen mode, which means it was already loaded
+ *   from a homescreen bookmark.
+ * @return {boolean} True if the bubble is being shown, false if it is not
+ *     allowed to show for one of the aforementioned reasons.
+ */
+google.bookmarkbubble.Bubble.prototype.showIfAllowed = function() {
+  if (!this.isAllowedToShow_()) {
+    return false;
+  }
+
+  this.show_();
+  return true;
+};
+
+
+/**
+ * Shows the bubble if allowed after loading the icon image. This method creates
+ * an image element to load the image into the browser's cache before showing
+ * the bubble to ensure that the image isn't blank. Use this instead of
+ * showIfAllowed if the image url is http and cacheable.
+ * This hack is necessary because Mobile Safari does not properly render
+ * image elements with border-radius CSS.
+ * @param {function()} opt_callback Closure to be called if and when the bubble
+ *        actually shows.
+ * @return {boolean} True if the bubble is allowed to show.
+ */
+google.bookmarkbubble.Bubble.prototype.showIfAllowedWhenLoaded =
+    function(opt_callback) {
+  if (!this.isAllowedToShow_()) {
+    return false;
+  }
+
+  var self = this;
+  // Attach to self to avoid garbage collection.
+  var img = self.loadImg_ = document.createElement('img');
+  img.src = self.getIconUrl_();
+  img.onload = function() {
+    if (img.complete) {
+      delete self.loadImg_;
+      img.onload = null;  // Break the circular reference.
+
+      self.show_();
+      opt_callback && opt_callback();
+    }
+  };
+  img.onload();
+
+  return true;
+};
+
+
+/**
+ * Sets the parameter in the location hash. As it is
+ * unpredictable what hash scheme is to be used, this method must be
+ * implemented by the host application.
+ *
+ * This gets called automatically when the bubble is shown. The idea is that if
+ * the user then creates a bookmark, we can later recognize on application
+ * startup whether it was from a bookmark suggested with this bubble.
+ *
+ * NOTE: Using a hash parameter to track whether the bubble has been shown
+ * conflicts with the navigation system in jQuery Mobile. If you are using that
+ * library, you should implement this function to track the bubble's status in
+ * a different way, e.g. using window.localStorage in HTML5.
+ */
+google.bookmarkbubble.Bubble.prototype.setHashParameter = google.abstractMethod;
+
+
+/**
+ * Whether the parameter is present in the location hash. As it is
+ * unpredictable what hash scheme is to be used, this method must be
+ * implemented by the host application.
+ *
+ * Call this method during application startup if you want to log whether the
+ * application was loaded from a bookmark with the bookmark bubble promotion
+ * parameter in it.
+ *
+ * @return {boolean} Whether the bookmark bubble parameter is present in the
+ *     location hash.
+ */
+google.bookmarkbubble.Bubble.prototype.hasHashParameter = google.abstractMethod;
+
+
+/**
+ * The number of times the user must dismiss the bubble before we stop showing
+ * it. This is a public property and can be changed by the host application if
+ * necessary.
+ * @type {number}
+ */
+google.bookmarkbubble.Bubble.prototype.NUMBER_OF_TIMES_TO_DISMISS = 2;
+
+
+/**
+ * Time in milliseconds. If the user does not dismiss the bubble, it will auto
+ * destruct after this amount of time.
+ * @type {number}
+ */
+google.bookmarkbubble.Bubble.prototype.TIME_UNTIL_AUTO_DESTRUCT = 15000;
+
+
+/**
+ * The prefix for keys in local storage. This is a public property and can be
+ * changed by the host application if necessary.
+ * @type {string}
+ */
+google.bookmarkbubble.Bubble.prototype.LOCAL_STORAGE_PREFIX = 'BOOKMARK_';
+
+
+/**
+ * The key name for the dismissed state.
+ * @type {string}
+ * @private
+ */
+google.bookmarkbubble.Bubble.prototype.DISMISSED_ = 'DISMISSED_COUNT';
+
+
+/**
+ * The arrow image in base64 data url format.
+ * @type {string}
+ * @private
+ */
+google.bookmarkbubble.Bubble.prototype.IMAGE_ARROW_DATA_URL_ = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAATCAMAAABSrFY3AAABKVBMVEUAAAD///8AAAAAAAAAAAAAAAAAAADf398AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD09PQAAAAAAAAAAAC9vb0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD19fUAAAAAAAAAAAAAAADq6uoAAAAAAAAAAAC8vLzU1NTT09MAAADg4OAAAADs7OwAAAAAAAAAAAD///+cueenwerA0vC1y+3a5fb5+/3t8vr4+v3w9PuwyOy3zO3h6vfh6vjq8Pqkv+mat+fE1fHB0/Cduuifu+iuxuuivemrxOvC1PDz9vzJ2fKpwuqmwOrb5vapw+q/0vDf6ffK2vLN3PPprJISAAAAQHRSTlMAAAEGExES7FM+JhUoQSxIRwMbNfkJUgXXBE4kDQIMHSA0Tw4xIToeTSc4Chz4OyIjPfI3QD/X5OZR6zzwLSUPrm1y3gAAAQZJREFUeF5lzsVyw0AURNE3IMsgmZmZgszQZoeZOf//EYlG5Yrhbs+im4Dj7slM5wBJ4OJ+undAUr68gK/Hyb6Bcp5yBR/w8jreNeAr5Eg2XE7g6e2/0z6cGw1JQhpmHP3u5aiPPnTTkIK48Hj9Op7bD3btAXTfgUdwYjwSDCVXMbizO0O4uDY/x4kYC5SWFnfC6N1a9RCO7i2XEmQJj2mHK1Hgp9Vq3QBRl9shuBLGhcNtHexcdQCnDUoUGetxDD+H2DQNG2xh6uAWgG2/17o1EmLqYH0Xej0UjHAaFxZIV6rJ/WK1kg7QZH8HU02zmdJinKZJaDV3TVMjM5Q9yiqYpUwiMwa/1apDXTNESjsAAAAASUVORK5CYII=';
+
+
+/**
+ * The close image in base64 data url format.
+ * @type {string}
+ * @private
+ */
+google.bookmarkbubble.Bubble.prototype.IMAGE_CLOSE_DATA_URL_ = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAALVBMVEXM3fm+1Pfb5/rF2fjw9f23z/aavPOhwfTp8PyTt/L3+v7T4vqMs/K7zP////+qRWzhAAAAXElEQVQIW2O4CwUM996BwVskxtOqd++2rwMyPI+ve31GD8h4Madqz2mwms5jZ/aBGS/mHIDoen3m+DowY8/hOVUgxusz+zqPg7SvPA1UxQfSvu/du0YUK2AMmDMA5H1qhVX33T8AAAAASUVORK5CYII=';
+
+
+/**
+ * The link used to locate the application's home screen icon to display inside
+ * the bubble. The default link used here is for an iPhone home screen icon
+ * without gloss. If your application uses a glossy icon, change this to
+ * 'apple-touch-icon'.
+ * @type {string}
+ * @private
+ */
+google.bookmarkbubble.Bubble.prototype.REL_ICON_ =
+    'apple-touch-icon-precomposed';
+
+
+/**
+ * Regular expression for detecting an iPhone or iPod or iPad.
+ * @type {!RegExp}
+ * @private
+ */
+google.bookmarkbubble.Bubble.prototype.MOBILE_SAFARI_USERAGENT_REGEX_ =
+    /iPhone|iPod|iPad/;
+
+
+/**
+ * Regular expression for detecting an iPad.
+ * @type {!RegExp}
+ * @private
+ */
+google.bookmarkbubble.Bubble.prototype.IPAD_USERAGENT_REGEX_ = /iPad/;
+
+
+/**
+ * Regular expression for extracting the iOS version. Only matches 2.0 and up.
+ * @type {!RegExp}
+ * @private
+ */
+google.bookmarkbubble.Bubble.prototype.IOS_VERSION_USERAGENT_REGEX_ =
+    /OS (\d)_(\d)(?:_(\d))?/;
+
+
+/**
+ * Determines whether the bubble should be shown or not.
+ * @return {boolean} Whether the bubble should be shown or not.
+ * @private
+ */
+google.bookmarkbubble.Bubble.prototype.isAllowedToShow_ = function() {
+  return this.isMobileSafari_() &&
+      !this.hasBeenDismissedTooManyTimes_() &&
+      !this.isFullscreen_() &&
+      !this.hasHashParameter();
+};
+
+
+/**
+ * Builds and shows the bubble.
+ * @private
+ */
+google.bookmarkbubble.Bubble.prototype.show_ = function() {
+  this.element_ = this.build_();
+
+  document.body.appendChild(this.element_);
+  this.element_.style.WebkitTransform =
+      'translate3d(0,' + this.getHiddenYPosition_() + 'px,0)';
+
+  this.setHashParameter();
+
+  window.setTimeout(this.boundScrollHandler_, 1);
+  window.addEventListener('scroll', this.boundScrollHandler_, false);
+
+  // If the user does not dismiss the bubble, slide out and destroy it after
+  // some time.
+  window.setTimeout(google.bind(this.autoDestruct_, this),
+      this.TIME_UNTIL_AUTO_DESTRUCT);
+};
+
+
+/**
+ * Destroys the bubble by removing its DOM nodes from the document.
+ */
+google.bookmarkbubble.Bubble.prototype.destroy = function() {
+  if (this.hasBeenDestroyed_) {
+    return;
+  }
+  window.removeEventListener('scroll', this.boundScrollHandler_, false);
+  if (this.element_ && this.element_.parentNode == document.body) {
+    document.body.removeChild(this.element_);
+    this.element_ = null;
+  }
+  this.hasBeenDestroyed_ = true;
+};
+
+
+/**
+ * Remember that the user has dismissed the bubble once more.
+ * @private
+ */
+google.bookmarkbubble.Bubble.prototype.rememberDismissal_ = function() {
+  if (window.localStorage) {
+    try {
+      var key = this.LOCAL_STORAGE_PREFIX + this.DISMISSED_;
+      var value = Number(window.localStorage[key]) || 0;
+      window.localStorage[key] = String(value + 1);
+    } catch (ex) {
+      // Looks like we've hit the storage size limit. Currently we have no
+      // fallback for this scenario, but we could use cookie storage instead.
+      // This would increase the code bloat though.
+    }
+  }
+};
+
+
+/**
+ * Whether the user has dismissed the bubble often enough that we will not
+ * show it again.
+ * @return {boolean} Whether the user has dismissed the bubble often enough
+ *     that we will not show it again.
+ * @private
+ */
+google.bookmarkbubble.Bubble.prototype.hasBeenDismissedTooManyTimes_ =
+    function() {
+  if (!window.localStorage) {
+    // If we can not use localStorage to remember how many times the user has
+    // dismissed the bubble, assume he has dismissed it. Otherwise we might end
+    // up showing it every time the host application loads, into eternity.
+    return true;
+  }
+  try {
+    var key = this.LOCAL_STORAGE_PREFIX + this.DISMISSED_;
+
+    // If the key has never been set, localStorage yields undefined, which
+    // Number() turns into NaN. In that case we'll fall back to zero for
+    // clarity's sake.
+    var value = Number(window.localStorage[key]) || 0;
+
+    return value >= this.NUMBER_OF_TIMES_TO_DISMISS;
+  } catch (ex) {
+    // If we got here, something is wrong with the localStorage. Make the same
+    // assumption as when it does not exist at all. Exceptions should only
+    // occur when setting a value (due to storage limitations) but let's be
+    // extra careful.
+    return true;
+  }
+};
+
+
+/**
+ * Whether the application is running in fullscreen mode.
+ * @return {boolean} Whether the application is running in fullscreen mode.
+ * @private
+ */
+google.bookmarkbubble.Bubble.prototype.isFullscreen_ = function() {
+  return !!window.navigator.standalone;
+};
+
+
+/**
+ * Whether the application is running inside Mobile Safari.
+ * @return {boolean} True if the current user agent looks like Mobile Safari.
+ * @private
+ */
+google.bookmarkbubble.Bubble.prototype.isMobileSafari_ = function() {
+  return this.MOBILE_SAFARI_USERAGENT_REGEX_.test(window.navigator.userAgent);
+};
+
+
+/**
+ * Whether the application is running on an iPad.
+ * @return {boolean} True if the current user agent looks like an iPad.
+ * @private
+ */
+google.bookmarkbubble.Bubble.prototype.isIpad_ = function() {
+  return this.IPAD_USERAGENT_REGEX_.test(window.navigator.userAgent);
+};
+
+
+/**
+ * Creates a version number from 4 integer pieces between 0 and 127 (inclusive).
+ * @param {*=} opt_a The major version.
+ * @param {*=} opt_b The minor version.
+ * @param {*=} opt_c The revision number.
+ * @param {*=} opt_d The build number.
+ * @return {number} A representation of the version.
+ * @private
+ */
+google.bookmarkbubble.Bubble.prototype.getVersion_ = function(opt_a, opt_b,
+    opt_c, opt_d) {
+  // We want to allow implicit conversion of any type to number while avoiding
+  // compiler warnings about the type.
+  return /** @type {number} */ (opt_a) << 21 |
+      /** @type {number} */ (opt_b) << 14 |
+      /** @type {number} */ (opt_c) << 7 |
+      /** @type {number} */ (opt_d);
+};
+
+
+/**
+ * Gets the iOS version of the device. Only works for 2.0+.
+ * @return {number} The iOS version.
+ * @private
+ */
+google.bookmarkbubble.Bubble.prototype.getIosVersion_ = function() {
+  var groups = this.IOS_VERSION_USERAGENT_REGEX_.exec(
+      window.navigator.userAgent) || [];
+  groups.shift();
+  return this.getVersion_.apply(this, groups);
+};
+
+
+/**
+ * Positions the bubble at the bottom of the viewport using an animated
+ * transition.
+ */
+google.bookmarkbubble.Bubble.prototype.setPosition = function() {
+  this.element_.style.WebkitTransition = '-webkit-transform 0.7s ease-out';
+  this.element_.style.WebkitTransform =
+      'translate3d(0,' + this.getVisibleYPosition_() + 'px,0)';
+};
+
+
+/**
+ * Destroys the bubble by removing its DOM nodes from the document, and
+ * remembers that it was dismissed.
+ * @private
+ */
+google.bookmarkbubble.Bubble.prototype.closeClickHandler_ = function() {
+  this.destroy();
+  this.rememberDismissal_();
+};
+
+
+/**
+ * Gets called after a while if the user ignores the bubble.
+ * @private
+ */
+google.bookmarkbubble.Bubble.prototype.autoDestruct_ = function() {
+  if (this.hasBeenDestroyed_) {
+    return;
+  }
+  this.element_.style.WebkitTransition = '-webkit-transform 0.7s ease-in';
+  this.element_.style.WebkitTransform =
+      'translate3d(0,' + this.getHiddenYPosition_() + 'px,0)';
+  window.setTimeout(google.bind(this.destroy, this), 700);
+};
+
+
+/**
+ * Gets the y offset used to show the bubble (i.e., position it on-screen).
+ * @return {number} The y offset.
+ * @private
+ */
+google.bookmarkbubble.Bubble.prototype.getVisibleYPosition_ = function() {
+  return this.isIpad_() ? window.pageYOffset + 17 :
+      window.pageYOffset - this.element_.offsetHeight + window.innerHeight - 17;
+};
+
+
+/**
+ * Gets the y offset used to hide the bubble (i.e., position it off-screen).
+ * @return {number} The y offset.
+ * @private
+ */
+google.bookmarkbubble.Bubble.prototype.getHiddenYPosition_ = function() {
+  return this.isIpad_() ? window.pageYOffset - this.element_.offsetHeight :
+      window.pageYOffset + window.innerHeight;
+};
+
+
+/**
+ * The url of the app's bookmark icon.
+ * @type {string|undefined}
+ * @private
+ */
+google.bookmarkbubble.Bubble.prototype.iconUrl_;
+
+
+/**
+ * Scrapes the document for a link element that specifies an Apple favicon and
+ * returns the icon url. Returns an empty data url if nothing can be found.
+ * @return {string} A url string.
+ * @private
+ */
+google.bookmarkbubble.Bubble.prototype.getIconUrl_ = function() {
+  if (!this.iconUrl_) {
+    var link = this.getLink(this.REL_ICON_);
+    if (!link || !(this.iconUrl_ = link.href)) {
+      this.iconUrl_ = 'data:image/png;base64,';
+    }
+  }
+  return this.iconUrl_;
+};
+
+
+/**
+ * Gets the requested link tag if it exists.
+ * @param {string} rel The rel attribute of the link tag to get.
+ * @return {Element} The requested link tag or null.
+ */
+google.bookmarkbubble.Bubble.prototype.getLink = function(rel) {
+  rel = rel.toLowerCase();
+  var links = document.getElementsByTagName('link');
+  for (var i = 0; i < links.length; ++i) {
+    var currLink = /** @type {Element} */ (links[i]);
+    if (currLink.getAttribute('rel').toLowerCase() == rel) {
+      return currLink;
+    }
+  }
+  return null;
+};
+
+
+/**
+ * Creates the bubble and appends it to the document.
+ * @return {Element} The bubble element.
+ * @private
+ */
+google.bookmarkbubble.Bubble.prototype.build_ = function() {
+  var bubble = document.createElement('div');
+  var isIpad = this.isIpad_();
+
+  bubble.style.position = 'absolute';
+  bubble.style.zIndex = 1000;
+  bubble.style.width = '100%';
+  bubble.style.left = '0';
+  bubble.style.top = '0';
+
+  var bubbleInner = document.createElement('div');
+  bubbleInner.style.position = 'relative';
+  bubbleInner.style.width = '214px';
+  bubbleInner.style.margin = isIpad ? '0 0 0 82px' : '0 auto';
+  bubbleInner.style.border = '2px solid #fff';
+  bubbleInner.style.padding = '20px 20px 20px 10px';
+  bubbleInner.style.WebkitBorderRadius = '8px';
+  bubbleInner.style.WebkitBoxShadow = '0 0 8px rgba(0, 0, 0, 0.7)';
+  bubbleInner.style.WebkitBackgroundSize = '100% 8px';
+  bubbleInner.style.backgroundColor = '#b0c8ec';
+  bubbleInner.style.background = '#cddcf3 -webkit-gradient(linear, ' +
+      'left bottom, left top, ' + isIpad ?
+          'from(#cddcf3), to(#b3caed)) no-repeat top' :
+          'from(#b3caed), to(#cddcf3)) no-repeat bottom';
+  bubbleInner.style.font = '13px/17px sans-serif';
+  bubble.appendChild(bubbleInner);
+
+  // The "Add to Home Screen" text is intended to be the exact same text
+  // that is displayed in the menu of Mobile Safari.
+  if (this.getIosVersion_() >= this.getVersion_(4, 2)) {
+    bubbleInner.innerHTML = 'Install this web app on your phone: ' +
+        'tap on the arrow and then <b>\'Add to Home Screen\'</b>';
+  } else {
+    bubbleInner.innerHTML = 'Install this web app on your phone: ' +
+        'tap <b style="font-size:15px">+</b> and then ' +
+        '<b>\'Add to Home Screen\'</b>';
+  }
+
+  var icon = document.createElement('div');
+  icon.style['float'] = 'left';
+  icon.style.width = '55px';
+  icon.style.height = '55px';
+  icon.style.margin = '-2px 7px 3px 5px';
+  icon.style.background =
+      '#fff url(' + this.getIconUrl_() + ') no-repeat -1px -1px';
+  icon.style.WebkitBackgroundSize = '57px';
+  icon.style.WebkitBorderRadius = '10px';
+  icon.style.WebkitBoxShadow = '0 2px 5px rgba(0, 0, 0, 0.4)';
+  bubbleInner.insertBefore(icon, bubbleInner.firstChild);
+
+  var arrow = document.createElement('div');
+  arrow.style.backgroundImage = 'url(' + this.IMAGE_ARROW_DATA_URL_ + ')';
+  arrow.style.width = '25px';
+  arrow.style.height = '19px';
+  arrow.style.position = 'absolute';
+  arrow.style.left = '111px';
+  if (isIpad) {
+    arrow.style.WebkitTransform = 'rotate(180deg)';
+    arrow.style.top = '-19px';
+  } else {
+    arrow.style.bottom = '-19px';
+  }
+  bubbleInner.appendChild(arrow);
+
+  var close = document.createElement('a');
+  close.onclick = google.bind(this.closeClickHandler_, this);
+  close.style.position = 'absolute';
+  close.style.display = 'block';
+  close.style.top = '-3px';
+  close.style.right = '-3px';
+  close.style.width = '16px';
+  close.style.height = '16px';
+  close.style.border = '10px solid transparent';
+  close.style.background =
+      'url(' + this.IMAGE_CLOSE_DATA_URL_ + ') no-repeat';
+  bubbleInner.appendChild(close);
+
+  return bubble;
+};
+
+window.addEventListener('load', function() {
+  window.setTimeout(function() {
+    var bubble = new google.bookmarkbubble.Bubble();
+
+    var parameter = 'bmb=1';
+
+    bubble.hasHashParameter = function() {
+      return window.location.hash.indexOf(parameter) != -1;
+    };
+
+    bubble.setHashParameter = function() {
+      if (!this.hasHashParameter()) {
+        window.location.hash += parameter;
+      }
+    };
+
+    bubble.getViewportHeight = function() {
+      window.console.log('Example of how to override getViewportHeight.');
+      return window.innerHeight;
+    };
+
+    bubble.getViewportScrollY = function() {
+      window.console.log('Example of how to override getViewportScrollY.');
+      return window.pageYOffset;
+    };
+
+    bubble.registerScrollHandler = function(handler) {
+      window.console.log('Example of how to override registerScrollHandler.');
+      window.addEventListener('scroll', handler, false);
+    };
+
+    bubble.deregisterScrollHandler = function(handler) {
+      window.console.log('Example of how to override deregisterScrollHandler.');
+      window.removeEventListener('scroll', handler, false);
+    };
+
+    bubble.showIfAllowed();
+  }, 1000);
+}, false);
+/*
  *	Tabby jQuery plugin version 0.12
  *
  *	Ted Devito - http://teddevito.com/demos/textarea.html

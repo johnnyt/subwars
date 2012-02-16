@@ -43,7 +43,8 @@ namespace :compile do
   task :client do
     libs = %w[
       ../../public/js/jquery-ui-1.8.16/jquery-ui-1.8.16.min
-      ../../public/js/bootstrap ../../public/js/polymaps.min ../../public/js/faye-browser-min
+      ../../public/js/bootstrap ../../public/js/polymaps.min
+      ../../public/js/faye-browser-min ../../public/js/bookmarkbubble
       lib/jQuery/jquery.textarea lib/CodeMirror/codemirror lib/CodeMirror/smalltalk
       Kernel-Objects Kernel-Classes Kernel-Methods Kernel-Collections Kernel-Exceptions Kernel-Transcript
       Compiler Canvas IDE parser SUnit
