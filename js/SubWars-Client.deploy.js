@@ -7,7 +7,6 @@ selector: unescape('initialize'),
 fn: function (){
 var self=this;
 smalltalk.send(self, "_initialize", [], smalltalk.Widget);
-(self['@client']=smalltalk.send((smalltalk.FayeClient || FayeClient), "_new", []));
 (self['@geo']=smalltalk.send((smalltalk.GeoLocation || GeoLocation), "_new", []));
 (self['@currentLocation']=smalltalk.send((smalltalk.Location || Location), "_newAtPARC", []));
 (self['@polymaps']=smalltalk.send(smalltalk.send((typeof window == 'undefined' ? nil : window), "_org", []), "_polymaps", []));
@@ -147,7 +146,7 @@ smalltalk.method({
 selector: unescape('updateNav'),
 fn: function (){
 var self=this;
-smalltalk.send(self['@nav'], "_contents_", [(function(html){smalltalk.send(smalltalk.send(html, "_li", []), "_with_", [(function(){(self['@consoleForm']=(function($rec){smalltalk.send($rec, "_class_", [unescape("form-search%20navbar-search%20pull-left")]);return smalltalk.send($rec, "_with_", [(function(){return (function($rec){smalltalk.send($rec, "_type_", ["text"]);smalltalk.send($rec, "_id_", ["console"]);smalltalk.send($rec, "_placeholder_", ["Chat"]);return smalltalk.send($rec, "_class_", [unescape("search-query%20span1")]);})(smalltalk.send(html, "_input", []));})]);})(smalltalk.send(html, "_form", [])));return smalltalk.send(smalltalk.send(self['@consoleForm'], "_asJQuery", []), "_bind_do_", ["submit", (function(e, input){smalltalk.send(e, "_preventDefault", []);(input=smalltalk.send(unescape("%23console"), "_asJQuery", []));smalltalk.send(self, "_processConsoleCommand_", [smalltalk.send(input, "_val", [])]);return smalltalk.send(input, "_val_", [""]);})]);})]);return smalltalk.send(smalltalk.send(html, "_li", []), "_with_", [(function(){return (function($rec){smalltalk.send($rec, "_with_", ["IDE"]);smalltalk.send($rec, "_href_", [unescape("%23ide")]);return smalltalk.send($rec, "_onClick_", [(function(e){smalltalk.send(e, "_preventDefault", []);return smalltalk.send((smalltalk.Browser || Browser), "_openOn_", [(smalltalk.SubWarsApp || SubWarsApp)]);})]);})(smalltalk.send(html, "_a", []));})]);})]);
+smalltalk.send(self['@nav'], "_contents_", [(function(html){return smalltalk.send(smalltalk.send(html, "_li", []), "_with_", [(function(){return (function($rec){smalltalk.send($rec, "_with_", ["IDE"]);smalltalk.send($rec, "_href_", [unescape("%23ide")]);return smalltalk.send($rec, "_onClick_", [(function(e){smalltalk.send(e, "_preventDefault", []);return smalltalk.send((smalltalk.Browser || Browser), "_openOn_", [(smalltalk.SubWarsApp || SubWarsApp)]);})]);})(smalltalk.send(html, "_a", []));})]);})]);
 return self;}
 }),
 smalltalk.SubWarsApp);

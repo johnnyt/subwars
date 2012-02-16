@@ -72,7 +72,7 @@ updateLat: aLat lng: aLng
 
 initialize
 	super initialize.
-	client := FayeClient new.
+	"client := FayeClient new."
 	geo := GeoLocation new.
 	currentLocation := Location newAtPARC.
 	polymaps := window org polymaps.
@@ -138,7 +138,7 @@ renderMapOn: html
 
 updateNav
 	nav contents: [:html|
-		html li with: [
+		"html li with: [
 		consoleForm := html form class: 'form-search navbar-search pull-left'; with: [
 			html input
 				type: 'text';
@@ -150,7 +150,7 @@ updateNav
 			e preventDefault.
 			input := '#console' asJQuery.
 			self processConsoleCommand: input val.
-			input val: '']].
+			input val: '']]."
 		html li with: [html a with: 'IDE'; href: '#ide'; onClick: [:e| e preventDefault. Browser openOn: SubWarsApp]]]
 ! !
 

@@ -8,15 +8,14 @@ category: 'initialization',
 fn: function (){
 var self=this;
 smalltalk.send(self, "_initialize", [], smalltalk.Widget);
-(self['@client']=smalltalk.send((smalltalk.FayeClient || FayeClient), "_new", []));
 (self['@geo']=smalltalk.send((smalltalk.GeoLocation || GeoLocation), "_new", []));
 (self['@currentLocation']=smalltalk.send((smalltalk.Location || Location), "_newAtPARC", []));
 (self['@polymaps']=smalltalk.send(smalltalk.send((typeof window == 'undefined' ? nil : window), "_org", []), "_polymaps", []));
 return self;},
 args: [],
-source: unescape('initialize%0A%09super%20initialize.%0A%09client%20%3A%3D%20FayeClient%20new.%0A%09geo%20%3A%3D%20GeoLocation%20new.%0A%09currentLocation%20%3A%3D%20Location%20newAtPARC.%0A%09polymaps%20%3A%3D%20window%20org%20polymaps.'),
+source: unescape('initialize%0A%09super%20initialize.%0A%09%22client%20%3A%3D%20FayeClient%20new.%22%0A%09geo%20%3A%3D%20GeoLocation%20new.%0A%09currentLocation%20%3A%3D%20Location%20newAtPARC.%0A%09polymaps%20%3A%3D%20window%20org%20polymaps.'),
 messageSends: ["initialize", "new", "newAtPARC", "polymaps", "org"],
-referencedClasses: ["FayeClient", "GeoLocation", "Location"]
+referencedClasses: ["GeoLocation", "Location"]
 }),
 smalltalk.SubWarsApp);
 
@@ -203,11 +202,11 @@ selector: unescape('updateNav'),
 category: 'rendering',
 fn: function (){
 var self=this;
-smalltalk.send(self['@nav'], "_contents_", [(function(html){smalltalk.send(smalltalk.send(html, "_li", []), "_with_", [(function(){(self['@consoleForm']=(function($rec){smalltalk.send($rec, "_class_", [unescape("form-search%20navbar-search%20pull-left")]);return smalltalk.send($rec, "_with_", [(function(){return (function($rec){smalltalk.send($rec, "_type_", ["text"]);smalltalk.send($rec, "_id_", ["console"]);smalltalk.send($rec, "_placeholder_", ["Chat"]);return smalltalk.send($rec, "_class_", [unescape("search-query%20span1")]);})(smalltalk.send(html, "_input", []));})]);})(smalltalk.send(html, "_form", [])));return smalltalk.send(smalltalk.send(self['@consoleForm'], "_asJQuery", []), "_bind_do_", ["submit", (function(e, input){smalltalk.send(e, "_preventDefault", []);(input=smalltalk.send(unescape("%23console"), "_asJQuery", []));smalltalk.send(self, "_processConsoleCommand_", [smalltalk.send(input, "_val", [])]);return smalltalk.send(input, "_val_", [""]);})]);})]);return smalltalk.send(smalltalk.send(html, "_li", []), "_with_", [(function(){return (function($rec){smalltalk.send($rec, "_with_", ["IDE"]);smalltalk.send($rec, "_href_", [unescape("%23ide")]);return smalltalk.send($rec, "_onClick_", [(function(e){smalltalk.send(e, "_preventDefault", []);return smalltalk.send((smalltalk.Browser || Browser), "_openOn_", [(smalltalk.SubWarsApp || SubWarsApp)]);})]);})(smalltalk.send(html, "_a", []));})]);})]);
+smalltalk.send(self['@nav'], "_contents_", [(function(html){return smalltalk.send(smalltalk.send(html, "_li", []), "_with_", [(function(){return (function($rec){smalltalk.send($rec, "_with_", ["IDE"]);smalltalk.send($rec, "_href_", [unescape("%23ide")]);return smalltalk.send($rec, "_onClick_", [(function(e){smalltalk.send(e, "_preventDefault", []);return smalltalk.send((smalltalk.Browser || Browser), "_openOn_", [(smalltalk.SubWarsApp || SubWarsApp)]);})]);})(smalltalk.send(html, "_a", []));})]);})]);
 return self;},
 args: [],
-source: unescape('updateNav%0A%09nav%20contents%3A%20%5B%3Ahtml%7C%0A%09%09html%20li%20with%3A%20%5B%0A%09%09consoleForm%20%3A%3D%20html%20form%20class%3A%20%27form-search%20navbar-search%20pull-left%27%3B%20with%3A%20%5B%0A%09%09%09html%20input%0A%09%09%09%09type%3A%20%27text%27%3B%0A%09%09%09%09id%3A%20%27console%27%3B%0A%09%09%09%09placeholder%3A%20%27Chat%27%3B%0A%09%09%09%09class%3A%20%27search-query%20span1%27%5D.%0A%0A%09%09consoleForm%20asJQuery%20bind%3A%20%27submit%27%20do%3A%20%5B%3Ae%20%3Ainput%7C%0A%09%09%09e%20preventDefault.%0A%09%09%09input%20%3A%3D%20%27%23console%27%20asJQuery.%0A%09%09%09self%20processConsoleCommand%3A%20input%20val.%0A%09%09%09input%20val%3A%20%27%27%5D%5D.%0A%09%09html%20li%20with%3A%20%5Bhtml%20a%20with%3A%20%27IDE%27%3B%20href%3A%20%27%23ide%27%3B%20onClick%3A%20%5B%3Ae%7C%20e%20preventDefault.%20Browser%20openOn%3A%20SubWarsApp%5D%5D%5D'),
-messageSends: ["contents:", "with:", "li", "class:", "type:", "id:", "placeholder:", "input", "form", "bind:do:", "asJQuery", "preventDefault", "processConsoleCommand:", "val", "val:", "href:", "onClick:", "openOn:", "a"],
+source: unescape('updateNav%0A%09nav%20contents%3A%20%5B%3Ahtml%7C%0A%09%09%22html%20li%20with%3A%20%5B%0A%09%09consoleForm%20%3A%3D%20html%20form%20class%3A%20%27form-search%20navbar-search%20pull-left%27%3B%20with%3A%20%5B%0A%09%09%09html%20input%0A%09%09%09%09type%3A%20%27text%27%3B%0A%09%09%09%09id%3A%20%27console%27%3B%0A%09%09%09%09placeholder%3A%20%27Chat%27%3B%0A%09%09%09%09class%3A%20%27search-query%20span1%27%5D.%0A%0A%09%09consoleForm%20asJQuery%20bind%3A%20%27submit%27%20do%3A%20%5B%3Ae%20%3Ainput%7C%0A%09%09%09e%20preventDefault.%0A%09%09%09input%20%3A%3D%20%27%23console%27%20asJQuery.%0A%09%09%09self%20processConsoleCommand%3A%20input%20val.%0A%09%09%09input%20val%3A%20%27%27%5D%5D.%22%0A%09%09html%20li%20with%3A%20%5Bhtml%20a%20with%3A%20%27IDE%27%3B%20href%3A%20%27%23ide%27%3B%20onClick%3A%20%5B%3Ae%7C%20e%20preventDefault.%20Browser%20openOn%3A%20SubWarsApp%5D%5D%5D'),
+messageSends: ["contents:", "with:", "li", "href:", "onClick:", "preventDefault", "openOn:", "a"],
 referencedClasses: ["Browser", "SubWarsApp"]
 }),
 smalltalk.SubWarsApp);
