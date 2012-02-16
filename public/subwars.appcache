@@ -1,0 +1,15 @@
+CACHE MANIFEST
+# 2012-02-15 v2
+
+js/jquery-1.7.min.js
+
+css/bootstrap.min.css
+js/jquery-ui-1.8.16/jquery-ui-1.8.16.css
+js/client.js
+
+amber/js/lib/CodeMirror/codemirror.css
+amber/js/lib/CodeMirror/amber.css
+amber/css/amber.css
+
+NETWORK:
+*

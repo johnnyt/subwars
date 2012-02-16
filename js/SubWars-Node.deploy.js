@@ -1,5 +1,5 @@
 smalltalk.addPackage('SubWars-Node', {});
-smalltalk.addClass('WebServer', smalltalk.Object, ['port', 'app', 'dirname', 'faye', 'app', 'express', 'bayeux', 'fs'], 'SubWars-Node');
+smalltalk.addClass('WebServer', smalltalk.Object, ['port', 'app', 'dirname', 'faye', 'app', 'express', 'bayeux', 'fs', 'sys', 'childProcess'], 'SubWars-Node');
 smalltalk.addMethod(
 unescape('_initialize'),
 smalltalk.method({
@@ -10,6 +10,8 @@ smalltalk.send(self, "_initialize", [], smalltalk.Object);
 self['@dirname'] = __dirname;
 (self['@port']=smalltalk.send(smalltalk.send((typeof process == 'undefined' ? nil : process), "_env", []), "_at_", ["PORT"]));
 (($receiver = self['@port']) == nil || $receiver == undefined) ? (function(){return (self['@port']=(5000));})() : $receiver;
+(self['@sys']=smalltalk.send(self, "_require_", ["sys"]));
+(self['@childProcess']=smalltalk.send(self, "_require_", ["child_process"]));
 (self['@fs']=smalltalk.send(self, "_require_", ["fs"]));
 (self['@express']=smalltalk.send(self, "_require_", ["express"]));
 (self['@faye']=smalltalk.send(self, "_require_", [unescape("./lib/faye-node.js")]));
@@ -64,7 +66,7 @@ var path=nil;
 var stream=nil;
 (path=smalltalk.send(".", "__comma", [smalltalk.send(smalltalk.send(aRequest, "_url", []), "_asString", [])]));
 (stream=smalltalk.send(self['@fs'], "_createWriteStream_", [path]));
-(function($rec){smalltalk.send($rec, "_setEncoding_", ["utf8"]);smalltalk.send($rec, "_on_do_", ["data", (function(chunk){return smalltalk.send(stream, "_write_", [chunk]);})]);return smalltalk.send($rec, "_on_do_", ["end", (function(){smalltalk.send(stream, "_end", []);return smalltalk.send(self, "_respondOKTo_", [aResponse]);})]);})(aRequest);
+(function($rec){smalltalk.send($rec, "_setEncoding_", ["utf8"]);smalltalk.send($rec, "_on_do_", ["data", (function(chunk){return smalltalk.send(stream, "_write_", [chunk]);})]);return smalltalk.send($rec, "_on_do_", ["end", (function(){smalltalk.send(stream, "_end", []);smalltalk.send(self, "_recompileJS", []);return smalltalk.send(self, "_respondOKTo_", [aResponse]);})]);})(aRequest);
 return self;}
 }),
 smalltalk.WebServer);
@@ -87,6 +89,17 @@ selector: unescape('require%3A'),
 fn: function (aModuleString){
 var self=this;
 return smalltalk.send((typeof require == 'undefined' ? nil : require), "_value_", [aModuleString]);
+return self;}
+}),
+smalltalk.WebServer);
+
+smalltalk.addMethod(
+unescape('_recompileJS'),
+smalltalk.method({
+selector: unescape('recompileJS'),
+fn: function (){
+var self=this;
+smalltalk.send(self['@childProcess'], "_exec_callback_", ["rake compile:all", (function(err, stdout, stderr){smalltalk.send(self['@sys'], "_puts_", [stdout]);return smalltalk.send(self['@sys'], "_puts_", [stderr]);})]);
 return self;}
 }),
 smalltalk.WebServer);

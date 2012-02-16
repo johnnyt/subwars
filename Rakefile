@@ -39,13 +39,17 @@ namespace :compile do
   desc 'Compile client'
   task :client do
     libs = %w[
-      ../../public/js/jquery-1.7.min ../../public/js/jquery-ui-1.8.16/jquery-ui-1.8.16.min
+      ../../public/js/jquery-ui-1.8.16/jquery-ui-1.8.16.min
       ../../public/js/bootstrap ../../public/js/polymaps.min ../../public/js/faye-browser-min
       lib/jQuery/jquery.textarea lib/CodeMirror/codemirror lib/CodeMirror/smalltalk
+      Kernel-Objects Kernel-Classes Kernel-Methods Kernel-Collections Kernel-Exceptions Kernel-Transcript
       Compiler Canvas IDE parser SUnit
       ../../js/HTML5 ../../js/SubWars-Client ../../js/SubWars-Node
     ].join(',')
 
     sh "./amber/bin/amberc -m SubWarsApp -l #{libs} public/js/client"
   end
+
+  desc 'Compile server and client'
+  task :all => [:client, :server]
 end

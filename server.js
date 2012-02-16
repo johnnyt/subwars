@@ -6154,123 +6154,6 @@ smalltalk.Message.klass);
 
 
 smalltalk.addPackage('Kernel-Collections', {});
-smalltalk.addClass('Association', smalltalk.Object, ['key', 'value'], 'Kernel-Collections');
-smalltalk.addMethod(
-unescape('__eq'),
-smalltalk.method({
-selector: unescape('%3D'),
-category: 'comparing',
-fn: function (anAssociation){
-var self=this;
-return smalltalk.send(smalltalk.send(smalltalk.send(self, "_class", []), "__eq", [smalltalk.send(anAssociation, "_class", [])]), "_and_", [(function(){return smalltalk.send(smalltalk.send(smalltalk.send(self, "_key", []), "__eq", [smalltalk.send(anAssociation, "_key", [])]), "_and_", [(function(){return smalltalk.send(smalltalk.send(self, "_value", []), "__eq", [smalltalk.send(anAssociation, "_value", [])]);})]);})]);
-return self;},
-args: ["anAssociation"],
-source: unescape('%3D%20anAssociation%0A%09%5Eself%20class%20%3D%20anAssociation%20class%20and%3A%20%5B%0A%09%20%20%20%20self%20key%20%3D%20anAssociation%20key%20and%3A%20%5B%0A%09%09self%20value%20%3D%20anAssociation%20value%5D%5D'),
-messageSends: ["and:", unescape("%3D"), "class", "key", "value"],
-referencedClasses: []
-}),
-smalltalk.Association);
-
-smalltalk.addMethod(
-unescape('_key_'),
-smalltalk.method({
-selector: unescape('key%3A'),
-category: 'accessing',
-fn: function (aKey){
-var self=this;
-(self['@key']=aKey);
-return self;},
-args: ["aKey"],
-source: unescape('key%3A%20aKey%0A%09key%20%3A%3D%20aKey'),
-messageSends: [],
-referencedClasses: []
-}),
-smalltalk.Association);
-
-smalltalk.addMethod(
-unescape('_key'),
-smalltalk.method({
-selector: unescape('key'),
-category: 'accessing',
-fn: function (){
-var self=this;
-return self['@key'];
-return self;},
-args: [],
-source: unescape('key%0A%09%5Ekey'),
-messageSends: [],
-referencedClasses: []
-}),
-smalltalk.Association);
-
-smalltalk.addMethod(
-unescape('_value_'),
-smalltalk.method({
-selector: unescape('value%3A'),
-category: 'accessing',
-fn: function (aValue){
-var self=this;
-(self['@value']=aValue);
-return self;},
-args: ["aValue"],
-source: unescape('value%3A%20aValue%0A%09value%20%3A%3D%20aValue'),
-messageSends: [],
-referencedClasses: []
-}),
-smalltalk.Association);
-
-smalltalk.addMethod(
-unescape('_value'),
-smalltalk.method({
-selector: unescape('value'),
-category: 'accessing',
-fn: function (){
-var self=this;
-return self['@value'];
-return self;},
-args: [],
-source: unescape('value%0A%09%5Evalue'),
-messageSends: [],
-referencedClasses: []
-}),
-smalltalk.Association);
-
-smalltalk.addMethod(
-unescape('_storeOn_'),
-smalltalk.method({
-selector: unescape('storeOn%3A'),
-category: 'comparing',
-fn: function (aStream){
-var self=this;
-smalltalk.send(self['@key'], "_storeOn_", [aStream]);
-smalltalk.send(aStream, "_nextPutAll_", [unescape("-%3E")]);
-smalltalk.send(self['@value'], "_storeOn_", [aStream]);
-return self;},
-args: ["aStream"],
-source: unescape('storeOn%3A%20aStream%0A%09%22Store%20in%20the%20format%20%28key-%3Evalue%29%22%0A%0A%09%22aStream%20nextPutAll%3A%20%27%28%27.%22%0A%09key%20storeOn%3A%20aStream.%0A%09aStream%20nextPutAll%3A%20%27-%3E%27.%0A%09value%20storeOn%3A%20aStream.%0A%09%22aStream%20nextPutAll%3A%20%27%29%27%22'),
-messageSends: ["storeOn:", "nextPutAll:"],
-referencedClasses: []
-}),
-smalltalk.Association);
-
-
-smalltalk.addMethod(
-unescape('_key_value_'),
-smalltalk.method({
-selector: unescape('key%3Avalue%3A'),
-category: 'instance creation',
-fn: function (aKey, aValue){
-var self=this;
-return (function($rec){smalltalk.send($rec, "_key_", [aKey]);smalltalk.send($rec, "_value_", [aValue]);return smalltalk.send($rec, "_yourself", []);})(smalltalk.send(self, "_new", []));
-return self;},
-args: ["aKey", "aValue"],
-source: unescape('key%3A%20aKey%20value%3A%20aValue%0A%09%20%20%20%20%5Eself%20new%0A%09%09key%3A%20aKey%3B%0A%09%09value%3A%20aValue%3B%0A%09%09yourself'),
-messageSends: ["key:", "value:", "yourself", "new"],
-referencedClasses: []
-}),
-smalltalk.Association.klass);
-
-
 smalltalk.addClass('Stream', smalltalk.Object, ['collection', 'position', 'streamSize'], 'Kernel-Collections');
 smalltalk.addMethod(
 unescape('_collection'),
@@ -6662,6 +6545,123 @@ messageSends: ["setCollection:", "setStreamSize:", "size", "yourself", "new"],
 referencedClasses: []
 }),
 smalltalk.Stream.klass);
+
+
+smalltalk.addClass('Association', smalltalk.Object, ['key', 'value'], 'Kernel-Collections');
+smalltalk.addMethod(
+unescape('__eq'),
+smalltalk.method({
+selector: unescape('%3D'),
+category: 'comparing',
+fn: function (anAssociation){
+var self=this;
+return smalltalk.send(smalltalk.send(smalltalk.send(self, "_class", []), "__eq", [smalltalk.send(anAssociation, "_class", [])]), "_and_", [(function(){return smalltalk.send(smalltalk.send(smalltalk.send(self, "_key", []), "__eq", [smalltalk.send(anAssociation, "_key", [])]), "_and_", [(function(){return smalltalk.send(smalltalk.send(self, "_value", []), "__eq", [smalltalk.send(anAssociation, "_value", [])]);})]);})]);
+return self;},
+args: ["anAssociation"],
+source: unescape('%3D%20anAssociation%0A%09%5Eself%20class%20%3D%20anAssociation%20class%20and%3A%20%5B%0A%09%20%20%20%20self%20key%20%3D%20anAssociation%20key%20and%3A%20%5B%0A%09%09self%20value%20%3D%20anAssociation%20value%5D%5D'),
+messageSends: ["and:", unescape("%3D"), "class", "key", "value"],
+referencedClasses: []
+}),
+smalltalk.Association);
+
+smalltalk.addMethod(
+unescape('_key_'),
+smalltalk.method({
+selector: unescape('key%3A'),
+category: 'accessing',
+fn: function (aKey){
+var self=this;
+(self['@key']=aKey);
+return self;},
+args: ["aKey"],
+source: unescape('key%3A%20aKey%0A%09key%20%3A%3D%20aKey'),
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Association);
+
+smalltalk.addMethod(
+unescape('_key'),
+smalltalk.method({
+selector: unescape('key'),
+category: 'accessing',
+fn: function (){
+var self=this;
+return self['@key'];
+return self;},
+args: [],
+source: unescape('key%0A%09%5Ekey'),
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Association);
+
+smalltalk.addMethod(
+unescape('_value_'),
+smalltalk.method({
+selector: unescape('value%3A'),
+category: 'accessing',
+fn: function (aValue){
+var self=this;
+(self['@value']=aValue);
+return self;},
+args: ["aValue"],
+source: unescape('value%3A%20aValue%0A%09value%20%3A%3D%20aValue'),
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Association);
+
+smalltalk.addMethod(
+unescape('_value'),
+smalltalk.method({
+selector: unescape('value'),
+category: 'accessing',
+fn: function (){
+var self=this;
+return self['@value'];
+return self;},
+args: [],
+source: unescape('value%0A%09%5Evalue'),
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Association);
+
+smalltalk.addMethod(
+unescape('_storeOn_'),
+smalltalk.method({
+selector: unescape('storeOn%3A'),
+category: 'comparing',
+fn: function (aStream){
+var self=this;
+smalltalk.send(self['@key'], "_storeOn_", [aStream]);
+smalltalk.send(aStream, "_nextPutAll_", [unescape("-%3E")]);
+smalltalk.send(self['@value'], "_storeOn_", [aStream]);
+return self;},
+args: ["aStream"],
+source: unescape('storeOn%3A%20aStream%0A%09%22Store%20in%20the%20format%20%28key-%3Evalue%29%22%0A%0A%09%22aStream%20nextPutAll%3A%20%27%28%27.%22%0A%09key%20storeOn%3A%20aStream.%0A%09aStream%20nextPutAll%3A%20%27-%3E%27.%0A%09value%20storeOn%3A%20aStream.%0A%09%22aStream%20nextPutAll%3A%20%27%29%27%22'),
+messageSends: ["storeOn:", "nextPutAll:"],
+referencedClasses: []
+}),
+smalltalk.Association);
+
+
+smalltalk.addMethod(
+unescape('_key_value_'),
+smalltalk.method({
+selector: unescape('key%3Avalue%3A'),
+category: 'instance creation',
+fn: function (aKey, aValue){
+var self=this;
+return (function($rec){smalltalk.send($rec, "_key_", [aKey]);smalltalk.send($rec, "_value_", [aValue]);return smalltalk.send($rec, "_yourself", []);})(smalltalk.send(self, "_new", []));
+return self;},
+args: ["aKey", "aValue"],
+source: unescape('key%3A%20aKey%20value%3A%20aValue%0A%09%20%20%20%20%5Eself%20new%0A%09%09key%3A%20aKey%3B%0A%09%09value%3A%20aValue%3B%0A%09%09yourself'),
+messageSends: ["key:", "value:", "yourself", "new"],
+referencedClasses: []
+}),
+smalltalk.Association.klass);
 
 
 smalltalk.addClass('RegularExpression', smalltalk.Object, [], 'Kernel-Collections');
@@ -7425,12 +7425,12 @@ var range=nil;
 var newCollection=nil;
 (range=smalltalk.send(anIndex, "_to_", [anotherIndex]));
 (newCollection=smalltalk.send(smalltalk.send(self, "_class", []), "_new_", [smalltalk.send(range, "_size", [])]));
-smalltalk.send(range, "_do_", [(function(each){return smalltalk.send(newCollection, "_at_put_", [each, smalltalk.send(self, "_at_", [each])]);})]);
+smalltalk.send(range, "_withIndexDo_", [(function(each, i){return smalltalk.send(newCollection, "_at_put_", [i, smalltalk.send(self, "_at_", [each])]);})]);
 return newCollection;
 return self;},
 args: ["anIndex", "anotherIndex"],
-source: unescape('copyFrom%3A%20anIndex%20to%3A%20anotherIndex%0A%09%7C%20range%20newCollection%20%7C%0A%09range%20%3A%3D%20anIndex%20to%3A%20anotherIndex.%0A%09newCollection%20%3A%3D%20self%20class%20new%3A%20range%20size.%0A%09range%20do%3A%20%5B%3Aeach%20%7C%0A%09%20%20%20%20newCollection%20at%3A%20each%20put%3A%20%28self%20at%3A%20each%29%5D.%0A%09%5EnewCollection'),
-messageSends: ["to:", "new:", "class", "size", "do:", "at:put:", "at:"],
+source: unescape('copyFrom%3A%20anIndex%20to%3A%20anotherIndex%0A%09%7C%20range%20newCollection%20%7C%0A%09range%20%3A%3D%20anIndex%20to%3A%20anotherIndex.%0A%09newCollection%20%3A%3D%20self%20class%20new%3A%20range%20size.%0A%09range%20withIndexDo%3A%20%5B%3Aeach%20%3Ai%20%7C%0A%09%20%20%20%20newCollection%20at%3A%20i%20put%3A%20%28self%20at%3A%20each%29%5D.%0A%09%5EnewCollection'),
+messageSends: ["to:", "new:", "class", "size", "withIndexDo:", "at:put:", "at:"],
 referencedClasses: []
 }),
 smalltalk.SequenceableCollection);
@@ -11359,8 +11359,8 @@ referencedClasses: ["Transcript"]
 smalltalk.ConsoleTranscript.klass);
 
 
-smalltalk.addPackage('Amber-Node', {});
-smalltalk.addClass('WebServer', smalltalk.Object, ['port', 'app', 'dirname', 'faye', 'app', 'express', 'bayeux', 'fs', 'assets'], 'Amber-Node');
+smalltalk.addPackage('SubWars-Node', {});
+smalltalk.addClass('WebServer', smalltalk.Object, ['port', 'app', 'dirname', 'faye', 'app', 'express', 'bayeux', 'fs', 'sys', 'childProcess'], 'SubWars-Node');
 smalltalk.addMethod(
 unescape('_initialize'),
 smalltalk.method({
@@ -11371,18 +11371,20 @@ var self=this;
 smalltalk.send(self, "_initialize", [], smalltalk.Object);
 self['@dirname'] = __dirname;
 (self['@port']=smalltalk.send(smalltalk.send((typeof process == 'undefined' ? nil : process), "_env", []), "_at_", ["PORT"]));
-(($receiver = self['@port']) == nil || $receiver == undefined) ? (function(){return (self['@port']=(4001));})() : $receiver;
+(($receiver = self['@port']) == nil || $receiver == undefined) ? (function(){return (self['@port']=(5000));})() : $receiver;
+(self['@sys']=smalltalk.send(self, "_require_", ["sys"]));
+(self['@childProcess']=smalltalk.send(self, "_require_", ["child_process"]));
 (self['@fs']=smalltalk.send(self, "_require_", ["fs"]));
 (self['@express']=smalltalk.send(self, "_require_", ["express"]));
-(self['@assets']=smalltalk.send(self, "_require_", [unescape("connect-assets")]));
 (self['@faye']=smalltalk.send(self, "_require_", [unescape("./lib/faye-node.js")]));
 (self['@app']=smalltalk.send(self['@express'], "_createServer", []));
-(self['@bayeux']=smalltalk.send(smalltalk.send(self['@faye'], "_at_", ["NodeAdapter"]), "_newValue_", [smalltalk.HashedCollection._fromPairs_([smalltalk.send("mount", "__minus_gt", [unescape("/faye")])])]));
+(self['@bayeux']=smalltalk.send(smalltalk.send(self['@faye'], "_at_", ["NodeAdapter"]), "_newValue_", [smalltalk.HashedCollection._fromPairs_([smalltalk.send("mount", "__minus_gt", [unescape("/faye")]),smalltalk.send("timeout", "__minus_gt", [(45)])])]));
+smalltalk.send(self['@bayeux'], "_attach_", [self['@app']]);
 (function($rec){smalltalk.send($rec, "_configure", []);return smalltalk.send($rec, "_initializeRoutes", []);})(self);
 return self;},
 args: [],
-source: unescape('initialize%0A%09super%20initialize.%0A%09%3Cself%5B%27@dirname%27%5D%20%3D%20__dirname%3E.%0A%09port%20%3A%3D%20process%20env%20at%3A%20%27PORT%27.%20%22Heroku%20will%20provide%20a%20port%20in%20production%22%0A%09port%20ifNil%3A%20%5B%20port%20%3A%3D%204001%20%5D.%0A%0A%09fs%20%3A%3D%20self%20require%3A%20%27fs%27.%0A%09express%20%3A%3D%20self%20require%3A%20%27express%27.%0A%09assets%20%3A%3D%20self%20require%3A%20%27connect-assets%27.%0A%09faye%20%3A%3D%20self%20require%3A%20%27./lib/faye-node.js%27.%0A%09app%20%3A%3D%20express%20createServer.%0A%09bayeux%20%3A%3D%20%28faye%20at%3A%20%27NodeAdapter%27%29%20newValue%3A%20%23%7B%20%27mount%27%20-%3E%20%27/faye%27%20%7D.%0A%0A%09self%0A%09%09configure%3B%0A%09%09initializeRoutes.'),
-messageSends: ["initialize", "at:", "env", "ifNil:", "require:", "createServer", "newValue:", unescape("-%3E"), "configure", "initializeRoutes"],
+source: unescape('initialize%0A%09super%20initialize.%0A%09%3Cself%5B%27@dirname%27%5D%20%3D%20__dirname%3E.%0A%0A%09port%20%3A%3D%20process%20env%20at%3A%20%27PORT%27.%20%22Heroku%20will%20provide%20a%20port%20in%20production%22%0A%09port%20ifNil%3A%20%5B%20port%20%3A%3D%205000%20%5D.%0A%0A%09sys%20%3A%3D%20self%20require%3A%20%27sys%27.%0A%09childProcess%20%3A%3D%20self%20require%3A%20%27child_process%27.%0A%09fs%20%3A%3D%20self%20require%3A%20%27fs%27.%0A%09express%20%3A%3D%20self%20require%3A%20%27express%27.%0A%09faye%20%3A%3D%20self%20require%3A%20%27./lib/faye-node.js%27.%0A%09app%20%3A%3D%20express%20createServer.%0A%09bayeux%20%3A%3D%20%28faye%20at%3A%20%27NodeAdapter%27%29%20newValue%3A%20%23%7B%20%27mount%27%20-%3E%20%27/faye%27%20.%20%27timeout%27%20-%3E%2045%20%7D.%0A%09bayeux%20attach%3A%20app.%0A%09%0A%09self%0A%09%09configure%3B%0A%09%09initializeRoutes.'),
+messageSends: ["initialize", "at:", "env", "ifNil:", "require:", "createServer", "newValue:", unescape("-%3E"), "attach:", "configure", "initializeRoutes"],
 referencedClasses: []
 }),
 smalltalk.WebServer);
@@ -11426,12 +11428,11 @@ selector: unescape('configure'),
 category: 'initialization',
 fn: function (){
 var self=this;
-smalltalk.send(self['@bayeux'], "_attach_", [self['@app']]);
-(function($rec){smalltalk.send($rec, "_configure_", [(function(){return (function($rec){smalltalk.send($rec, "_set_val_", ["view options", smalltalk.HashedCollection._fromPairs_([smalltalk.send("layout", "__minus_gt", [false])])]);smalltalk.send($rec, "_set_val_", ["view engine", "jade"]);smalltalk.send($rec, "_use_", [smalltalk.send(self['@express'], "_static_", [smalltalk.send(self['@dirname'], "__comma", [unescape("/public")])])]);smalltalk.send($rec, "_use_", [smalltalk.send(self['@express'], "_logger", [])]);smalltalk.send($rec, "_use_", [smalltalk.send(self['@assets'], "_value", [])]);return smalltalk.send($rec, "_use_", [smalltalk.send(self['@app'], "_at_", ["router"])]);})(self['@app']);})]);smalltalk.send($rec, "_configure_with_", ["development", (function(){return smalltalk.send(self['@app'], "_use_", [smalltalk.send(self['@express'], "_errorHandler_", [smalltalk.HashedCollection._fromPairs_([smalltalk.send("dumpExceptions", "__minus_gt", [true]),smalltalk.send("showStack", "__minus_gt", [true])])])]);})]);return smalltalk.send($rec, "_configure_with_", ["production", (function(){return smalltalk.send(self['@app'], "_use_", [smalltalk.send(self['@express'], "_errorHandler", [])]);})]);})(self['@app']);
+(function($rec){smalltalk.send($rec, "_configure_", [(function(){return (function($rec){smalltalk.send($rec, "_set_val_", ["view options", smalltalk.HashedCollection._fromPairs_([smalltalk.send("layout", "__minus_gt", [false])])]);smalltalk.send($rec, "_set_val_", ["view engine", "jade"]);smalltalk.send($rec, "_use_", [smalltalk.send(self['@express'], "_logger", [])]);smalltalk.send($rec, "_use_", [smalltalk.send(self['@express'], "_static_", [smalltalk.send(self['@dirname'], "__comma", [unescape("/public")])])]);return smalltalk.send($rec, "_use_", [smalltalk.send(self['@app'], "_at_", ["router"])]);})(self['@app']);})]);smalltalk.send($rec, "_configure_with_", ["development", (function(){return smalltalk.send(self['@app'], "_use_", [smalltalk.send(self['@express'], "_errorHandler_", [smalltalk.HashedCollection._fromPairs_([smalltalk.send("dumpExceptions", "__minus_gt", [true]),smalltalk.send("showStack", "__minus_gt", [true])])])]);})]);return smalltalk.send($rec, "_configure_with_", ["production", (function(){return smalltalk.send(self['@app'], "_use_", [smalltalk.send(self['@express'], "_errorHandler", [])]);})]);})(self['@app']);
 return self;},
 args: [],
-source: unescape('configure%0A%09bayeux%20attach%3A%20app.%0A%09%0A%09app%20configure%3A%20%5B%20app%0A%09%09set%3A%20%27view%20options%27%20val%3A%20%23%7B%20%27layout%27%20-%3E%20false%20%7D%3B%0A%09%09set%3A%20%27view%20engine%27%20val%3A%20%27jade%27%3B%0A%09%09use%3A%20%28express%20static%3A%20dirname%2C%20%27/public%27%29%3B%0A%09%09use%3A%20express%20logger%3B%0A%09%09use%3A%20assets%20value%3B%0A%09%09use%3A%20%28app%20at%3A%20%27router%27%29%20%5D%3B%0A%0A%09configure%3A%20%27development%27%20with%3A%20%5B%20app%0A%09%09use%3A%20%28express%20errorHandler%3A%20%23%7B%20%27dumpExceptions%27%20-%3E%20true%20.%20%27showStack%27%20-%3E%20true%20%7D%29%20%5D%3B%0A%0A%09configure%3A%20%27production%27%20with%3A%20%5B%20app%0A%09%09use%3A%20%28express%20errorHandler%29%20%5D'),
-messageSends: ["attach:", "configure:", "set:val:", unescape("-%3E"), "use:", "static:", unescape("%2C"), "logger", "value", "at:", "configure:with:", "errorHandler:", "errorHandler"],
+source: unescape('configure%0A%09app%20configure%3A%20%5B%20app%0A%09%09set%3A%20%27view%20options%27%20val%3A%20%23%7B%20%27layout%27%20-%3E%20false%20%7D%3B%0A%09%09set%3A%20%27view%20engine%27%20val%3A%20%27jade%27%3B%0A%09%09use%3A%20express%20logger%3B%0A%09%09use%3A%20%28express%20static%3A%20dirname%2C%20%27/public%27%29%3B%0A%09%09use%3A%20%28app%20at%3A%20%27router%27%29%20%5D%3B%0A%0A%09configure%3A%20%27development%27%20with%3A%20%5B%20app%0A%09%09use%3A%20%28express%20errorHandler%3A%20%23%7B%20%27dumpExceptions%27%20-%3E%20true%20.%20%27showStack%27%20-%3E%20true%20%7D%29%20%5D%3B%0A%0A%09configure%3A%20%27production%27%20with%3A%20%5B%20app%0A%09%09use%3A%20%28express%20errorHandler%29%20%5D'),
+messageSends: ["configure:", "set:val:", unescape("-%3E"), "use:", "logger", "static:", unescape("%2C"), "at:", "configure:with:", "errorHandler:", "errorHandler"],
 referencedClasses: []
 }),
 smalltalk.WebServer);
@@ -11447,11 +11448,11 @@ var path=nil;
 var stream=nil;
 (path=smalltalk.send(".", "__comma", [smalltalk.send(smalltalk.send(aRequest, "_url", []), "_asString", [])]));
 (stream=smalltalk.send(self['@fs'], "_createWriteStream_", [path]));
-(function($rec){smalltalk.send($rec, "_setEncoding_", ["utf8"]);smalltalk.send($rec, "_on_do_", ["data", (function(chunk){return smalltalk.send(stream, "_write_", [chunk]);})]);return smalltalk.send($rec, "_on_do_", ["end", (function(){smalltalk.send(stream, "_end", []);return smalltalk.send(self, "_respondOKTo_", [aResponse]);})]);})(aRequest);
+(function($rec){smalltalk.send($rec, "_setEncoding_", ["utf8"]);smalltalk.send($rec, "_on_do_", ["data", (function(chunk){return smalltalk.send(stream, "_write_", [chunk]);})]);return smalltalk.send($rec, "_on_do_", ["end", (function(){smalltalk.send(stream, "_end", []);smalltalk.send(self, "_recompileJS", []);return smalltalk.send(self, "_respondOKTo_", [aResponse]);})]);})(aRequest);
 return self;},
 args: ["aRequest", "aResponse"],
-source: unescape('handlePUT%3A%20aRequest%20respondTo%3A%20aResponse%0A%09%7C%20path%20stream%20%7C%0A%09path%20%3A%3D%20%27.%27%2C%20aRequest%20url%20asString.%0A%09stream%20%3A%3D%20fs%20createWriteStream%3A%20path.%0A%09aRequest%0A%09%09setEncoding%3A%20%27utf8%27%3B%0A%09%09on%3A%20%27data%27%20do%3A%20%5B%20%3Achunk%20%7C%20stream%20write%3A%20chunk%20%5D%3B%0A%09%09on%3A%20%27end%27%20do%3A%20%5B%0A%09%09%09stream%20end.%0A%09%09%09self%20respondOKTo%3A%20aResponse%20%5D'),
-messageSends: [unescape("%2C"), "asString", "url", "createWriteStream:", "setEncoding:", "on:do:", "write:", "end", "respondOKTo:"],
+source: unescape('handlePUT%3A%20aRequest%20respondTo%3A%20aResponse%0A%09%7C%20path%20stream%20%7C%0A%09path%20%3A%3D%20%27.%27%2C%20aRequest%20url%20asString.%0A%09stream%20%3A%3D%20fs%20createWriteStream%3A%20path.%0A%09aRequest%0A%09%09setEncoding%3A%20%27utf8%27%3B%0A%09%09on%3A%20%27data%27%20do%3A%20%5B%20%3Achunk%20%7C%20stream%20write%3A%20chunk%20%5D%3B%0A%09%09on%3A%20%27end%27%20do%3A%20%5B%0A%09%09%09stream%20end.%0A%09%09%09self%20recompileJS.%0A%09%09%09self%20respondOKTo%3A%20aResponse%20%5D'),
+messageSends: [unescape("%2C"), "asString", "url", "createWriteStream:", "setEncoding:", "on:do:", "write:", "end", "recompileJS", "respondOKTo:"],
 referencedClasses: []
 }),
 smalltalk.WebServer);
@@ -11484,6 +11485,22 @@ return self;},
 args: ["aModuleString"],
 source: unescape('require%3A%20aModuleString%0A%09%22call%20to%20the%20Node%20require%20function%22%0A%09%5Erequire%20value%3A%20aModuleString'),
 messageSends: ["value:"],
+referencedClasses: []
+}),
+smalltalk.WebServer);
+
+smalltalk.addMethod(
+unescape('_recompileJS'),
+smalltalk.method({
+selector: unescape('recompileJS'),
+category: 'actions',
+fn: function (){
+var self=this;
+smalltalk.send(self['@childProcess'], "_exec_callback_", ["rake compile:all", (function(err, stdout, stderr){smalltalk.send(self['@sys'], "_puts_", [stdout]);return smalltalk.send(self['@sys'], "_puts_", [stderr]);})]);
+return self;},
+args: [],
+source: unescape('recompileJS%0A%09childProcess%20exec%3A%20%27rake%20compile%3Aall%27%20callback%3A%20%5B%3Aerr%20%3Astdout%20%3Astderr%7C%0A%09%09sys%20puts%3A%20stdout.%0A%09%09sys%20puts%3A%20stderr%5D'),
+messageSends: ["exec:callback:", "puts:"],
 referencedClasses: []
 }),
 smalltalk.WebServer);

@@ -1,5 +1,5 @@
 smalltalk.addPackage('SubWars-Node', {});
-smalltalk.addClass('WebServer', smalltalk.Object, ['port', 'app', 'dirname', 'faye', 'app', 'express', 'bayeux', 'fs'], 'SubWars-Node');
+smalltalk.addClass('WebServer', smalltalk.Object, ['port', 'app', 'dirname', 'faye', 'app', 'express', 'bayeux', 'fs', 'sys', 'childProcess'], 'SubWars-Node');
 smalltalk.addMethod(
 unescape('_initialize'),
 smalltalk.method({
@@ -11,6 +11,8 @@ smalltalk.send(self, "_initialize", [], smalltalk.Object);
 self['@dirname'] = __dirname;
 (self['@port']=smalltalk.send(smalltalk.send((typeof process == 'undefined' ? nil : process), "_env", []), "_at_", ["PORT"]));
 (($receiver = self['@port']) == nil || $receiver == undefined) ? (function(){return (self['@port']=(5000));})() : $receiver;
+(self['@sys']=smalltalk.send(self, "_require_", ["sys"]));
+(self['@childProcess']=smalltalk.send(self, "_require_", ["child_process"]));
 (self['@fs']=smalltalk.send(self, "_require_", ["fs"]));
 (self['@express']=smalltalk.send(self, "_require_", ["express"]));
 (self['@faye']=smalltalk.send(self, "_require_", [unescape("./lib/faye-node.js")]));
@@ -20,7 +22,7 @@ smalltalk.send(self['@bayeux'], "_attach_", [self['@app']]);
 (function($rec){smalltalk.send($rec, "_configure", []);return smalltalk.send($rec, "_initializeRoutes", []);})(self);
 return self;},
 args: [],
-source: unescape('initialize%0A%09super%20initialize.%0A%09%3Cself%5B%27@dirname%27%5D%20%3D%20__dirname%3E.%0A%0A%09port%20%3A%3D%20process%20env%20at%3A%20%27PORT%27.%20%22Heroku%20will%20provide%20a%20port%20in%20production%22%0A%09port%20ifNil%3A%20%5B%20port%20%3A%3D%205000%20%5D.%0A%0A%09fs%20%3A%3D%20self%20require%3A%20%27fs%27.%0A%09express%20%3A%3D%20self%20require%3A%20%27express%27.%0A%09faye%20%3A%3D%20self%20require%3A%20%27./lib/faye-node.js%27.%0A%09app%20%3A%3D%20express%20createServer.%0A%09bayeux%20%3A%3D%20%28faye%20at%3A%20%27NodeAdapter%27%29%20newValue%3A%20%23%7B%20%27mount%27%20-%3E%20%27/faye%27%20.%20%27timeout%27%20-%3E%2045%20%7D.%0A%09bayeux%20attach%3A%20app.%0A%09%0A%09self%0A%09%09configure%3B%0A%09%09initializeRoutes.'),
+source: unescape('initialize%0A%09super%20initialize.%0A%09%3Cself%5B%27@dirname%27%5D%20%3D%20__dirname%3E.%0A%0A%09port%20%3A%3D%20process%20env%20at%3A%20%27PORT%27.%20%22Heroku%20will%20provide%20a%20port%20in%20production%22%0A%09port%20ifNil%3A%20%5B%20port%20%3A%3D%205000%20%5D.%0A%0A%09sys%20%3A%3D%20self%20require%3A%20%27sys%27.%0A%09childProcess%20%3A%3D%20self%20require%3A%20%27child_process%27.%0A%09fs%20%3A%3D%20self%20require%3A%20%27fs%27.%0A%09express%20%3A%3D%20self%20require%3A%20%27express%27.%0A%09faye%20%3A%3D%20self%20require%3A%20%27./lib/faye-node.js%27.%0A%09app%20%3A%3D%20express%20createServer.%0A%09bayeux%20%3A%3D%20%28faye%20at%3A%20%27NodeAdapter%27%29%20newValue%3A%20%23%7B%20%27mount%27%20-%3E%20%27/faye%27%20.%20%27timeout%27%20-%3E%2045%20%7D.%0A%09bayeux%20attach%3A%20app.%0A%09%0A%09self%0A%09%09configure%3B%0A%09%09initializeRoutes.'),
 messageSends: ["initialize", "at:", "env", "ifNil:", "require:", "createServer", "newValue:", unescape("-%3E"), "attach:", "configure", "initializeRoutes"],
 referencedClasses: []
 }),
@@ -85,11 +87,11 @@ var path=nil;
 var stream=nil;
 (path=smalltalk.send(".", "__comma", [smalltalk.send(smalltalk.send(aRequest, "_url", []), "_asString", [])]));
 (stream=smalltalk.send(self['@fs'], "_createWriteStream_", [path]));
-(function($rec){smalltalk.send($rec, "_setEncoding_", ["utf8"]);smalltalk.send($rec, "_on_do_", ["data", (function(chunk){return smalltalk.send(stream, "_write_", [chunk]);})]);return smalltalk.send($rec, "_on_do_", ["end", (function(){smalltalk.send(stream, "_end", []);return smalltalk.send(self, "_respondOKTo_", [aResponse]);})]);})(aRequest);
+(function($rec){smalltalk.send($rec, "_setEncoding_", ["utf8"]);smalltalk.send($rec, "_on_do_", ["data", (function(chunk){return smalltalk.send(stream, "_write_", [chunk]);})]);return smalltalk.send($rec, "_on_do_", ["end", (function(){smalltalk.send(stream, "_end", []);smalltalk.send(self, "_recompileJS", []);return smalltalk.send(self, "_respondOKTo_", [aResponse]);})]);})(aRequest);
 return self;},
 args: ["aRequest", "aResponse"],
-source: unescape('handlePUT%3A%20aRequest%20respondTo%3A%20aResponse%0A%09%7C%20path%20stream%20%7C%0A%09path%20%3A%3D%20%27.%27%2C%20aRequest%20url%20asString.%0A%09stream%20%3A%3D%20fs%20createWriteStream%3A%20path.%0A%09aRequest%0A%09%09setEncoding%3A%20%27utf8%27%3B%0A%09%09on%3A%20%27data%27%20do%3A%20%5B%20%3Achunk%20%7C%20stream%20write%3A%20chunk%20%5D%3B%0A%09%09on%3A%20%27end%27%20do%3A%20%5B%0A%09%09%09stream%20end.%0A%09%09%09self%20respondOKTo%3A%20aResponse%20%5D'),
-messageSends: [unescape("%2C"), "asString", "url", "createWriteStream:", "setEncoding:", "on:do:", "write:", "end", "respondOKTo:"],
+source: unescape('handlePUT%3A%20aRequest%20respondTo%3A%20aResponse%0A%09%7C%20path%20stream%20%7C%0A%09path%20%3A%3D%20%27.%27%2C%20aRequest%20url%20asString.%0A%09stream%20%3A%3D%20fs%20createWriteStream%3A%20path.%0A%09aRequest%0A%09%09setEncoding%3A%20%27utf8%27%3B%0A%09%09on%3A%20%27data%27%20do%3A%20%5B%20%3Achunk%20%7C%20stream%20write%3A%20chunk%20%5D%3B%0A%09%09on%3A%20%27end%27%20do%3A%20%5B%0A%09%09%09stream%20end.%0A%09%09%09self%20recompileJS.%0A%09%09%09self%20respondOKTo%3A%20aResponse%20%5D'),
+messageSends: [unescape("%2C"), "asString", "url", "createWriteStream:", "setEncoding:", "on:do:", "write:", "end", "recompileJS", "respondOKTo:"],
 referencedClasses: []
 }),
 smalltalk.WebServer);
@@ -122,6 +124,22 @@ return self;},
 args: ["aModuleString"],
 source: unescape('require%3A%20aModuleString%0A%09%22call%20to%20the%20Node%20require%20function%22%0A%09%5Erequire%20value%3A%20aModuleString'),
 messageSends: ["value:"],
+referencedClasses: []
+}),
+smalltalk.WebServer);
+
+smalltalk.addMethod(
+unescape('_recompileJS'),
+smalltalk.method({
+selector: unescape('recompileJS'),
+category: 'actions',
+fn: function (){
+var self=this;
+smalltalk.send(self['@childProcess'], "_exec_callback_", ["rake compile:all", (function(err, stdout, stderr){smalltalk.send(self['@sys'], "_puts_", [stdout]);return smalltalk.send(self['@sys'], "_puts_", [stderr]);})]);
+return self;},
+args: [],
+source: unescape('recompileJS%0A%09childProcess%20exec%3A%20%27rake%20compile%3Aall%27%20callback%3A%20%5B%3Aerr%20%3Astdout%20%3Astderr%7C%0A%09%09sys%20puts%3A%20stdout.%0A%09%09sys%20puts%3A%20stderr%5D'),
+messageSends: ["exec:callback:", "puts:"],
 referencedClasses: []
 }),
 smalltalk.WebServer);
