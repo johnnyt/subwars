@@ -1,5 +1,5 @@
 smalltalk.addPackage('SubWars-Node', {});
-smalltalk.addClass('WebServer', smalltalk.Object, ['port', 'app', 'dirname', 'faye', 'app', 'express', 'bayeux', 'fs', 'sys', 'childProcess'], 'SubWars-Node');
+smalltalk.addClass('WebServer', smalltalk.Object, ['port', 'app', 'dirname', 'faye', 'app', 'express', 'bayeux', 'fs', 'childProcess', 'util'], 'SubWars-Node');
 smalltalk.addMethod(
 unescape('_initialize'),
 smalltalk.method({
@@ -10,7 +10,7 @@ smalltalk.send(self, "_initialize", [], smalltalk.Object);
 self['@dirname'] = __dirname;
 (self['@port']=smalltalk.send(smalltalk.send((typeof process == 'undefined' ? nil : process), "_env", []), "_at_", ["PORT"]));
 (($receiver = self['@port']) == nil || $receiver == undefined) ? (function(){return (self['@port']=(5000));})() : $receiver;
-(self['@sys']=smalltalk.send(self, "_require_", ["sys"]));
+(self['@util']=smalltalk.send(self, "_require_", ["util"]));
 (self['@childProcess']=smalltalk.send(self, "_require_", ["child_process"]));
 (self['@fs']=smalltalk.send(self, "_require_", ["fs"]));
 (self['@express']=smalltalk.send(self, "_require_", ["express"]));
@@ -99,7 +99,7 @@ smalltalk.method({
 selector: unescape('recompileJS'),
 fn: function (){
 var self=this;
-smalltalk.send(self['@childProcess'], "_exec_callback_", ["rake compile:all", (function(err, stdout, stderr){smalltalk.send(self['@sys'], "_puts_", [stdout]);return smalltalk.send(self['@sys'], "_puts_", [stderr]);})]);
+((($receiver = smalltalk.send("production", "__eq", [smalltalk.send(smalltalk.send(self['@app'], "_settings", []), "_env", [])])).klass === smalltalk.Boolean) ? (! $receiver ? (function(){return smalltalk.send(self['@childProcess'], "_exec_callback_", ["rake compile:all", (function(err, stdout, stderr){smalltalk.send(self['@sys'], "_puts_", [stdout]);return smalltalk.send(self['@sys'], "_puts_", [stderr]);})]);})() : nil) : smalltalk.send($receiver, "_ifFalse_", [(function(){return smalltalk.send(self['@childProcess'], "_exec_callback_", ["rake compile:all", (function(err, stdout, stderr){smalltalk.send(self['@sys'], "_puts_", [stdout]);return smalltalk.send(self['@sys'], "_puts_", [stderr]);})]);})]));
 return self;}
 }),
 smalltalk.WebServer);

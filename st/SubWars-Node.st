@@ -1,14 +1,15 @@
 Smalltalk current createPackage: 'SubWars-Node' properties: #{}!
 Object subclass: #WebServer
-	instanceVariableNames: 'port app dirname faye app express bayeux fs sys childProcess'
+	instanceVariableNames: 'port app dirname faye app express bayeux fs childProcess util'
 	category: 'SubWars-Node'!
 
 !WebServer methodsFor: 'actions'!
 
 recompileJS
-	childProcess exec: 'rake compile:all' callback: [:err :stdout :stderr|
-		sys puts: stdout.
-		sys puts: stderr]
+	('production' = app settings env) ifFalse: [
+		childProcess exec: 'rake compile:all' callback: [:err :stdout :stderr|
+			sys puts: stdout.
+			sys puts: stderr]]
 ! !
 
 !WebServer methodsFor: 'initialization'!
@@ -20,7 +21,7 @@ initialize
 	port := process env at: 'PORT'. "Heroku will provide a port in production"
 	port ifNil: [ port := 5000 ].
 
-	sys := self require: 'sys'.
+	util := self require: 'util'.
 	childProcess := self require: 'child_process'.
 	fs := self require: 'fs'.
 	express := self require: 'express'.

@@ -30,6 +30,9 @@ task :server do
   sh 'bundle exec foreman start'
 end
 
+desc 'Alias for compile:all'
+task :compile => 'compile:all'
+
 namespace :compile do
   desc 'Compile server'
   task :server do
