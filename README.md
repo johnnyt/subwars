@@ -1,5 +1,6 @@
 # SubWars
 
+
 SubWars is a GPS based submarine game. Both the client HTML5 app and the Node server are written in [Amber Smalltalk](https://github.com/NicolasPetton/amber).
 
 
