@@ -1,6 +1,6 @@
 Smalltalk current createPackage: 'SubWars-Node' properties: #{}!
 Object subclass: #WebServer
-	instanceVariableNames: 'port app dirname faye app express bayeux fs childProcess util'
+	instanceVariableNames: 'port app dirname faye app express bayeux fs childProcess util redisStore'
 	category: 'SubWars-Node'!
 
 !WebServer methodsFor: 'actions'!
@@ -8,8 +8,8 @@ Object subclass: #WebServer
 recompileJS
 	('production' = app settings env) ifFalse: [
 		childProcess exec: 'rake compile:all' callback: [:err :stdout :stderr|
-			sys puts: stdout.
-			sys puts: stderr]]
+			util puts: stdout.
+			util puts: stderr]]
 ! !
 
 !WebServer methodsFor: 'initialization'!
@@ -27,6 +27,7 @@ initialize
 	express := self require: 'express'.
 	faye := self require: './lib/faye-node.js'.
 	app := express createServer.
+	redisStore := (self require: 'connect-redis') value: express.
 	bayeux := (faye at: 'NodeAdapter') newValue: #{ 'mount' -> '/faye' . 'timeout' -> 45 }.
 	bayeux attach: app.
 	
@@ -37,7 +38,9 @@ initialize
 
 initializeRoutes
 	app
-		get: '/' do: [ :req :res | res render: 'index' ];
+		get: '/' do: [ :req :res |
+			self initializeVisitor: req.
+			res render: 'index' with: #{ 'session' -> req session } ];
 		put: '/*' do: [ :req :res | self handlePUT: req respondTo: res ]
 !
 
@@ -47,13 +50,28 @@ configure
 		set: 'view engine' val: 'jade';
 		use: express logger;
 		use: (express static: dirname, '/public');
-		use: (app at: 'router') ];
+		use: express cookieParser;
+		use: (express session: #{ 'secret' -> 'i''m gonna getcha!!'. 'store' -> redisStore new });
+		use: (app at: 'router')];
 
 	configure: 'development' with: [ app
 		use: (express errorHandler: #{ 'dumpExceptions' -> true . 'showStack' -> true }) ];
 
 	configure: 'production' with: [ app
 		use: (express errorHandler) ]
+!
+
+initializeVisitor: aRequest
+	|newId|
+	console log: 'initial visitor_id'.
+	console log: aRequest session.
+	console log: aRequest session at: 'visitor_id'.
+	Visitor nextId: [:id| console log: '-----------------'; log: id. newId := id].
+	console log: newId.
+	"(aRequest session at: 'visitor_id') ifNil: [
+		aRequest session at: 'visitor_id' put: Visitor nextId]."
+	console log: aRequest session at: 'visitor_id'.
+	aRequest cookies at: 'vid' put: (aRequest session at: 'visitor_id').
 ! !
 
 !WebServer methodsFor: 'private'!
@@ -93,5 +111,35 @@ start
 
 main
 	^self new start
+! !
+
+Object subclass: #Visitor
+	instanceVariableNames: 'id'
+	category: 'SubWars-Node'!
+
+!Visitor methodsFor: 'accessing'!
+
+id
+	^id ifNil: [-1]
+! !
+
+Visitor class instanceVariableNames: 'redis redisClient'!
+
+!Visitor class methodsFor: 'accessing'!
+
+nextId
+	self initializeRedis.
+	console log: '---------------------------------\n'.
+	redisClient incr: 'visitors:id' callback: [:err :res| ^res].
+!
+
+initializeRedis
+	redis ifNil: [redis := require value: 'redis'].
+	redisClient ifNil: [redisClient := redis createClient]
+!
+
+nextId: aBlock
+	self initializeRedis.
+	redisClient incr: 'visitors:id' callback: [:err :res| aBlock value: res].
 ! !
 

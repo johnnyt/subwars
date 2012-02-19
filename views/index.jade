@@ -1,5 +1,5 @@
 !!! 5
-html(lang='en', manifest_='subwars.appcache')
+html(lang='en', manifest=app.settings.env == 'production' ? 'subwars.appcache' : '')
   head
     title SubWars
     meta(charset='utf-8')
