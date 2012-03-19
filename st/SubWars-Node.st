@@ -25,13 +25,11 @@ initialize
 	childProcess := self require: 'child_process'.
 	fs := self require: 'fs'.
 	express := self require: 'express'.
-	faye := self require: './lib/faye-node.js'.
 	app := express createServer.
-	bayeux := (faye at: 'NodeAdapter') newValue: #{ 'mount' -> '/faye' . 'timeout' -> 45 }.
-	bayeux attach: app.
 	
 	self
 		configure;
+		initializeFaye;
 		initializeRoutes.
 !
 
@@ -54,6 +52,12 @@ configure
 
 	configure: 'production' with: [ app
 		use: (express errorHandler) ]
+!
+
+initializeFaye
+	faye := self require: './lib/faye-node.js'.
+	bayeux := faye NodeAdapter newValue: #{ 'mount' -> '/faye' }.
+	bayeux attach: app.
 ! !
 
 !WebServer methodsFor: 'private'!

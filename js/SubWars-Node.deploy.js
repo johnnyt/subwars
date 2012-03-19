@@ -14,11 +14,8 @@ self['@dirname'] = __dirname;
 (self['@childProcess']=smalltalk.send(self, "_require_", ["child_process"]));
 (self['@fs']=smalltalk.send(self, "_require_", ["fs"]));
 (self['@express']=smalltalk.send(self, "_require_", ["express"]));
-(self['@faye']=smalltalk.send(self, "_require_", [unescape("./lib/faye-node.js")]));
 (self['@app']=smalltalk.send(self['@express'], "_createServer", []));
-(self['@bayeux']=smalltalk.send(smalltalk.send(self['@faye'], "_at_", ["NodeAdapter"]), "_newValue_", [smalltalk.HashedCollection._fromPairs_([smalltalk.send("mount", "__minus_gt", [unescape("/faye")]),smalltalk.send("timeout", "__minus_gt", [(45)])])]));
-smalltalk.send(self['@bayeux'], "_attach_", [self['@app']]);
-(function($rec){smalltalk.send($rec, "_configure", []);return smalltalk.send($rec, "_initializeRoutes", []);})(self);
+(function($rec){smalltalk.send($rec, "_configure", []);smalltalk.send($rec, "_initializeFaye", []);return smalltalk.send($rec, "_initializeRoutes", []);})(self);
 return self;}
 }),
 smalltalk.WebServer);
@@ -100,6 +97,19 @@ selector: unescape('recompileJS'),
 fn: function (){
 var self=this;
 ((($receiver = smalltalk.send("production", "__eq", [smalltalk.send(smalltalk.send(self['@app'], "_settings", []), "_env", [])])).klass === smalltalk.Boolean) ? (! $receiver ? (function(){return smalltalk.send(self['@childProcess'], "_exec_callback_", ["rake compile:all", (function(err, stdout, stderr){smalltalk.send(self['@sys'], "_puts_", [stdout]);return smalltalk.send(self['@sys'], "_puts_", [stderr]);})]);})() : nil) : smalltalk.send($receiver, "_ifFalse_", [(function(){return smalltalk.send(self['@childProcess'], "_exec_callback_", ["rake compile:all", (function(err, stdout, stderr){smalltalk.send(self['@sys'], "_puts_", [stdout]);return smalltalk.send(self['@sys'], "_puts_", [stderr]);})]);})]));
+return self;}
+}),
+smalltalk.WebServer);
+
+smalltalk.addMethod(
+unescape('_initializeFaye'),
+smalltalk.method({
+selector: unescape('initializeFaye'),
+fn: function (){
+var self=this;
+(self['@faye']=smalltalk.send(self, "_require_", [unescape("./lib/faye-node.js")]));
+(self['@bayeux']=smalltalk.send(smalltalk.send(self['@faye'], "_NodeAdapter", []), "_newValue_", [smalltalk.HashedCollection._fromPairs_([smalltalk.send("mount", "__minus_gt", [unescape("/faye")])])]));
+smalltalk.send(self['@bayeux'], "_attach_", [self['@app']]);
 return self;}
 }),
 smalltalk.WebServer);
