@@ -11441,15 +11441,17 @@ selector: unescape('handlePUT%3ArespondTo%3A'),
 category: 'request handling',
 fn: function (aRequest, aResponse){
 var self=this;
-var path=nil;
+try{var path=nil;
 var stream=nil;
+((($receiver = smalltalk.send("production", "__eq", [smalltalk.send(smalltalk.send(self['@app'], "_settings", []), "_env", [])])).klass === smalltalk.Boolean) ? ($receiver ? (function(){smalltalk.send(self, "_respondOKTo_", [aResponse]);return (function(){throw({name: 'stReturn', selector: '_handlePUT_respondTo_', fn: function(){return self}})})();})() : nil) : smalltalk.send($receiver, "_ifTrue_", [(function(){smalltalk.send(self, "_respondOKTo_", [aResponse]);return (function(){throw({name: 'stReturn', selector: '_handlePUT_respondTo_', fn: function(){return self}})})();})]));
 (path=smalltalk.send(".", "__comma", [smalltalk.send(smalltalk.send(aRequest, "_url", []), "_asString", [])]));
 (stream=smalltalk.send(self['@fs'], "_createWriteStream_", [path]));
 (function($rec){smalltalk.send($rec, "_setEncoding_", ["utf8"]);smalltalk.send($rec, "_on_do_", ["data", (function(chunk){return smalltalk.send(stream, "_write_", [chunk]);})]);return smalltalk.send($rec, "_on_do_", ["end", (function(){smalltalk.send(stream, "_end", []);smalltalk.send(self, "_recompileJS", []);return smalltalk.send(self, "_respondOKTo_", [aResponse]);})]);})(aRequest);
-return self;},
+return self;
+} catch(e) {if(e.name === 'stReturn' && e.selector === '_handlePUT_respondTo_'){return e.fn()} throw(e)}},
 args: ["aRequest", "aResponse"],
-source: unescape('handlePUT%3A%20aRequest%20respondTo%3A%20aResponse%0A%09%7C%20path%20stream%20%7C%0A%09path%20%3A%3D%20%27.%27%2C%20aRequest%20url%20asString.%0A%09stream%20%3A%3D%20fs%20createWriteStream%3A%20path.%0A%09aRequest%0A%09%09setEncoding%3A%20%27utf8%27%3B%0A%09%09on%3A%20%27data%27%20do%3A%20%5B%20%3Achunk%20%7C%20stream%20write%3A%20chunk%20%5D%3B%0A%09%09on%3A%20%27end%27%20do%3A%20%5B%0A%09%09%09stream%20end.%0A%09%09%09self%20recompileJS.%0A%09%09%09self%20respondOKTo%3A%20aResponse%20%5D'),
-messageSends: [unescape("%2C"), "asString", "url", "createWriteStream:", "setEncoding:", "on:do:", "write:", "end", "recompileJS", "respondOKTo:"],
+source: unescape('handlePUT%3A%20aRequest%20respondTo%3A%20aResponse%0A%09%7C%20path%20stream%20%7C%0A%09%28%27production%27%20%3D%20app%20settings%20env%29%20ifTrue%3A%20%5B%0A%09%09self%20respondOKTo%3A%20aResponse.%20%5Eself%5D.%0A%09path%20%3A%3D%20%27.%27%2C%20aRequest%20url%20asString.%0A%09stream%20%3A%3D%20fs%20createWriteStream%3A%20path.%0A%09aRequest%0A%09%09setEncoding%3A%20%27utf8%27%3B%0A%09%09on%3A%20%27data%27%20do%3A%20%5B%20%3Achunk%20%7C%20stream%20write%3A%20chunk%20%5D%3B%0A%09%09on%3A%20%27end%27%20do%3A%20%5B%0A%09%09%09stream%20end.%0A%09%09%09self%20recompileJS.%0A%09%09%09self%20respondOKTo%3A%20aResponse%20%5D'),
+messageSends: ["ifTrue:", unescape("%3D"), "env", "settings", "respondOKTo:", unescape("%2C"), "asString", "url", "createWriteStream:", "setEncoding:", "on:do:", "write:", "end", "recompileJS"],
 referencedClasses: []
 }),
 smalltalk.WebServer);
@@ -11493,10 +11495,10 @@ selector: unescape('recompileJS'),
 category: 'actions',
 fn: function (){
 var self=this;
-((($receiver = smalltalk.send("production", "__eq", [smalltalk.send(smalltalk.send(self['@app'], "_settings", []), "_env", [])])).klass === smalltalk.Boolean) ? (! $receiver ? (function(){return smalltalk.send(self['@childProcess'], "_exec_callback_", ["rake compile:all", (function(err, stdout, stderr){smalltalk.send(self['@sys'], "_puts_", [stdout]);return smalltalk.send(self['@sys'], "_puts_", [stderr]);})]);})() : nil) : smalltalk.send($receiver, "_ifFalse_", [(function(){return smalltalk.send(self['@childProcess'], "_exec_callback_", ["rake compile:all", (function(err, stdout, stderr){smalltalk.send(self['@sys'], "_puts_", [stdout]);return smalltalk.send(self['@sys'], "_puts_", [stderr]);})]);})]));
+((($receiver = smalltalk.send("production", "__eq", [smalltalk.send(smalltalk.send(self['@app'], "_settings", []), "_env", [])])).klass === smalltalk.Boolean) ? (! $receiver ? (function(){return smalltalk.send(self['@childProcess'], "_exec_callback_", ["rake compile:all", (function(err, stdout, stderr){smalltalk.send(self['@util'], "_puts_", [stdout]);return smalltalk.send(self['@util'], "_puts_", [stderr]);})]);})() : nil) : smalltalk.send($receiver, "_ifFalse_", [(function(){return smalltalk.send(self['@childProcess'], "_exec_callback_", ["rake compile:all", (function(err, stdout, stderr){smalltalk.send(self['@util'], "_puts_", [stdout]);return smalltalk.send(self['@util'], "_puts_", [stderr]);})]);})]));
 return self;},
 args: [],
-source: unescape('recompileJS%0A%09%28%27production%27%20%3D%20app%20settings%20env%29%20ifFalse%3A%20%5B%0A%09%09childProcess%20exec%3A%20%27rake%20compile%3Aall%27%20callback%3A%20%5B%3Aerr%20%3Astdout%20%3Astderr%7C%0A%09%09%09sys%20puts%3A%20stdout.%0A%09%09%09sys%20puts%3A%20stderr%5D%5D'),
+source: unescape('recompileJS%0A%09%28%27production%27%20%3D%20app%20settings%20env%29%20ifFalse%3A%20%5B%0A%09%09childProcess%20exec%3A%20%27rake%20compile%3Aall%27%20callback%3A%20%5B%3Aerr%20%3Astdout%20%3Astderr%7C%0A%09%09%09util%20puts%3A%20stdout.%0A%09%09%09util%20puts%3A%20stderr%5D%5D'),
 messageSends: ["ifFalse:", unescape("%3D"), "env", "settings", "exec:callback:", "puts:"],
 referencedClasses: []
 }),

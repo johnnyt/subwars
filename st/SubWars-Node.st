@@ -8,8 +8,8 @@ Object subclass: #WebServer
 recompileJS
 	('production' = app settings env) ifFalse: [
 		childProcess exec: 'rake compile:all' callback: [:err :stdout :stderr|
-			sys puts: stdout.
-			sys puts: stderr]]
+			util puts: stdout.
+			util puts: stderr]]
 ! !
 
 !WebServer methodsFor: 'initialization'!
@@ -71,6 +71,8 @@ require: aModuleString
 
 handlePUT: aRequest respondTo: aResponse
 	| path stream |
+	('production' = app settings env) ifTrue: [
+		self respondOKTo: aResponse. ^self].
 	path := '.', aRequest url asString.
 	stream := fs createWriteStream: path.
 	aRequest

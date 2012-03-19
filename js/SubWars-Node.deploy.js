@@ -59,12 +59,14 @@ smalltalk.method({
 selector: unescape('handlePUT%3ArespondTo%3A'),
 fn: function (aRequest, aResponse){
 var self=this;
-var path=nil;
+try{var path=nil;
 var stream=nil;
+((($receiver = smalltalk.send("production", "__eq", [smalltalk.send(smalltalk.send(self['@app'], "_settings", []), "_env", [])])).klass === smalltalk.Boolean) ? ($receiver ? (function(){smalltalk.send(self, "_respondOKTo_", [aResponse]);return (function(){throw({name: 'stReturn', selector: '_handlePUT_respondTo_', fn: function(){return self}})})();})() : nil) : smalltalk.send($receiver, "_ifTrue_", [(function(){smalltalk.send(self, "_respondOKTo_", [aResponse]);return (function(){throw({name: 'stReturn', selector: '_handlePUT_respondTo_', fn: function(){return self}})})();})]));
 (path=smalltalk.send(".", "__comma", [smalltalk.send(smalltalk.send(aRequest, "_url", []), "_asString", [])]));
 (stream=smalltalk.send(self['@fs'], "_createWriteStream_", [path]));
 (function($rec){smalltalk.send($rec, "_setEncoding_", ["utf8"]);smalltalk.send($rec, "_on_do_", ["data", (function(chunk){return smalltalk.send(stream, "_write_", [chunk]);})]);return smalltalk.send($rec, "_on_do_", ["end", (function(){smalltalk.send(stream, "_end", []);smalltalk.send(self, "_recompileJS", []);return smalltalk.send(self, "_respondOKTo_", [aResponse]);})]);})(aRequest);
-return self;}
+return self;
+} catch(e) {if(e.name === 'stReturn' && e.selector === '_handlePUT_respondTo_'){return e.fn()} throw(e)}}
 }),
 smalltalk.WebServer);
 
@@ -96,7 +98,7 @@ smalltalk.method({
 selector: unescape('recompileJS'),
 fn: function (){
 var self=this;
-((($receiver = smalltalk.send("production", "__eq", [smalltalk.send(smalltalk.send(self['@app'], "_settings", []), "_env", [])])).klass === smalltalk.Boolean) ? (! $receiver ? (function(){return smalltalk.send(self['@childProcess'], "_exec_callback_", ["rake compile:all", (function(err, stdout, stderr){smalltalk.send(self['@sys'], "_puts_", [stdout]);return smalltalk.send(self['@sys'], "_puts_", [stderr]);})]);})() : nil) : smalltalk.send($receiver, "_ifFalse_", [(function(){return smalltalk.send(self['@childProcess'], "_exec_callback_", ["rake compile:all", (function(err, stdout, stderr){smalltalk.send(self['@sys'], "_puts_", [stdout]);return smalltalk.send(self['@sys'], "_puts_", [stderr]);})]);})]));
+((($receiver = smalltalk.send("production", "__eq", [smalltalk.send(smalltalk.send(self['@app'], "_settings", []), "_env", [])])).klass === smalltalk.Boolean) ? (! $receiver ? (function(){return smalltalk.send(self['@childProcess'], "_exec_callback_", ["rake compile:all", (function(err, stdout, stderr){smalltalk.send(self['@util'], "_puts_", [stdout]);return smalltalk.send(self['@util'], "_puts_", [stderr]);})]);})() : nil) : smalltalk.send($receiver, "_ifFalse_", [(function(){return smalltalk.send(self['@childProcess'], "_exec_callback_", ["rake compile:all", (function(err, stdout, stderr){smalltalk.send(self['@util'], "_puts_", [stdout]);return smalltalk.send(self['@util'], "_puts_", [stderr]);})]);})]));
 return self;}
 }),
 smalltalk.WebServer);

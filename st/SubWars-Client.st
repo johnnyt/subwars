@@ -1,219 +1,36 @@
 Smalltalk current createPackage: 'SubWars-Client' properties: #{}!
-Widget subclass: #SubWarsApp
-	instanceVariableNames: 'div client geo currentLocation brand nav tools map polymaps consoleForm positionWatch'
+Object subclass: #GeoHash
+	instanceVariableNames: ''
 	category: 'SubWars-Client'!
 
-!SubWarsApp methodsFor: 'accessing'!
+!GeoHash methodsFor: 'accessing'!
 
-pageClasses
-	^{ MapPage }
+table
+	^#(
+	#( 'b'	'c'	'f'	'g'	'u'	'v'	'y'	'a' )
+	#( '8'	'9'	'd'	'e'	's'	't'	'w'	'x' )
+	#( '2'	'3'	'6'	'7'	'k'	'm'	'q'	'r' )
+	#( '0'	'1'	'4'	'5'	'h'	'j'	'n'	'p' )
+	)
 ! !
 
-!SubWarsApp methodsFor: 'actions'!
+!GeoHash methodsFor: 'actions'!
 
-show
-	self appendToJQuery: 'body' asJQuery
+generateGrid
+	|str|
+	self table withIndexDo: [:row :y|
+		row withIndexDo: [:ch :x|
+			str := x asString, '@', y asString, ' ', ch.
+			console log: str]]
 !
 
-startTracking
-	|getPositionBlock|
-	self stopTracking.
-	getPositionBlock := [geo getCurrentPosition: [:pos| self updateLat: pos coords latitude lng: pos coords longitude]].
-	positionWatch := getPositionBlock valueWithInterval: 10 * 1000.
-	getPositionBlock value.
-	"geo watchPosition: [:position|
-		self updateLat: position coords latitude
-			lng: position coords longitude]"
-!
-
-stopTracking
-	positionWatch ifNotNil: [
-		window clearInterval: positionWatch.
-		positionWatch := nil]
-	"geo clearWatch"
-!
-
-destroy
-	geo ifNotNil: [geo clearWatch].
-	client ifNotNil: [client disconnect].
-	div ifNotNil: [div asJQuery remove].
-	positionWatch ifNotNil: [window clearInterval: positionWatch]
-!
-
-processConsoleCommand: aCommandString
-	(aCommandString match: '^gh ')
-		ifTrue: [window alert: 'I should lookup the GeoHash you provided']
-		ifFalse: [client chat: aCommandString]
-!
-
-updateLat: aLat lng: aLng
-	|loc geoJson coord|
-	loc := Location newLat: aLat lng: aLng.
-	loc updateGeoHash.
-	map center: #{ 'lat' -> aLat . 'lon' -> aLng }.
-
-	coord := Array new: 5.
-	coord
-		at: 1 put: (Array with: loc boundingMinLng with: loc boundingMinLat);
-		at: 2 put: (Array with: loc boundingMaxLng with: loc boundingMinLat);
-		at: 3 put: (Array with: loc boundingMaxLng with: loc boundingMaxLat);
-		at: 4 put: (Array with: loc boundingMinLng with: loc boundingMaxLat);
-		at: 5 put: (Array with: loc boundingMinLng with: loc boundingMinLat).
-		
-	geoJson := polymaps geoJson
-		features: (Array new: #{ 'geometry' -> #{ 'coordinates' -> coord . 'type' -> 'LineString' } });
-		on: 'load' do: [ :e | e features do: [ :feature |
-			feature element setAttribute: 'style' val: 'stroke: red;']].
-
-	map add: geoJson
-! !
-
-!SubWarsApp methodsFor: 'initialization'!
-
-initialize
-	super initialize.
-	client := FayeClient new.
-	geo := GeoLocation new.
-	currentLocation := Location newAtPARC.
-	polymaps := window org polymaps.
-! !
-
-!SubWarsApp methodsFor: 'rendering'!
-
-renderNavOn: html
-	html div class: 'navbar navbar-fixed-top'; with: [
-		html div class: 'navbar-inner'; with: [
-			html div class: 'container-fluid'; with: [
-				html a class: 'btn btn-navbar';
-					at: 'data-toggle' put: 'collapse';
-					at: 'data-target' put: '.nav-collapse';
-					with: [html span class: 'icon-bar'. html span class: 'icon-bar'. html span class: 'icon-bar'].
-				brand := html a class: 'brand'; href: '#'.
-				html div class: 'nav-collapse'; with: [ 
-					nav := html ul class: 'nav'.
-					tools := html ul class: 'nav pull-right']]]]
-!
-
-updateTools
-	tools contents: [:html|
-		html li class: 'dropdown'; with: [
-			html a href: '#'; class: 'dropdown-toggle'; at: 'data-toggle' put: 'dropdown'; with: [
-				html with: 'Tools '.
-				(html tag: 'b') class: 'caret'].
-			html ul class: 'dropdown-menu'; with: [
-				html li with: [html a with: 'Toggle IDE'; href: '#ide'; onClick: [:e| e preventDefault. window toggleAmberIDE]].
-				html li class: 'divider'.
-				html li with: [html a with: 'Browse SubWars'; href: '#browse'; onClick: [:e| e preventDefault. Browser openOn: SubWarsApp]].
-				html li with: [html a with: 'Inspect SubWars'; href: '#inspect'; onClick: [:e| e preventDefault. SubWarsApp instance inspect]].
-				html li with: [html a with: 'Restart SubWars'; href: '#restart'; onClick: [:e| e preventDefault. SubWarsApp restart]]]]]
-!
-
-renderOn: html
-	div := html div id: 'subwars'; with: [
-		self renderNavOn: html;
-			renderMapOn: html;
-			update;
-			startTracking]
-!
-
-update
-	self updateNav;
-		updateTools
-!
-
-renderMapOn: html
-	| svg |
-	html div id: 'map'.
-	<svg = document.getElementById("map").appendChild(org.polymaps.svg("svg"))>.
-	map := window org polymaps map container: svg.
-	map zoom: 16.
-	"midnight-commander: 999"
-	"SW-black-basic: 52152"
-	<self['@map'].add(org.polymaps.image()
-		.url(org.polymaps.url("http://{S}tile.cloudmade.com"
-		+ "/4dc7790c1c744bdab4909fdb857d642d" // subwars
-		+ "/999/256/{Z}/{X}/{Y}.png")
-		.hosts(["a.", "b.", "c.", ""])));>.
-!
-
-updateNav
-	nav contents: [:html|
-		html li with: [
-		consoleForm := html form class: 'form-search navbar-search pull-left'; with: [
-			html input
-				type: 'text';
-				id: 'console';
-				placeholder: 'Chat';
-				class: 'search-query span1'].
-
-		consoleForm asJQuery bind: 'submit' do: [:e :input|
-			e preventDefault.
-			input := '#console' asJQuery.
-			self processConsoleCommand: input val.
-			input val: '']].
-		html li with: [html a with: 'IDE'; href: '#ide'; onClick: [:e| e preventDefault. Browser openOn: SubWarsApp]]]
-! !
-
-SubWarsApp class instanceVariableNames: 'instance'!
-
-!SubWarsApp class methodsFor: 'accessing'!
-
-instance
-	^instance ifNil: [instance := self new]
-! !
-
-!SubWarsApp class methodsFor: 'actions'!
-
-start
-	^self instance
-		show;
-		yourself
-!
-
-restart
-	self instance ifNotNil: [self instance destroy].
-	instance := nil.
-	^self start
-!
-
-main
-	self start
-! !
-
-Object subclass: #FayeClient
-	instanceVariableNames: 'faye client'
-	category: 'SubWars-Client'!
-
-!FayeClient methodsFor: 'actions'!
-
-disconnect
-	client ifNotNil: [client disconnect]
-! !
-
-!FayeClient methodsFor: 'chat'!
-
-chat: aString
-	client publish: '/chat' val: aString
-! !
-
-!FayeClient methodsFor: 'initialization'!
-
-initialize
-	| loc url |
-	faye := window at: 'Faye'.
-	(faye at: 'Logging') at: 'logLevel' put: 'info'.
-	faye at: 'logger' put: [ :msg | console log: msg ].
-	
-	loc := window location.
-	url := location protocol, '//', location hostname.
-	loc port asString = '' ifFalse: [ url := url, ':', loc port asString ].
-	url := url, '/faye'.
-	
-	client := (faye at: 'Client') newValue: url.
-	client bind: 'transport:down' do: [ console log: 'Transport down' ].
-	client bind: 'transport:up' do: [ console log: 'Transport up' ].
-
-	client subscribe: '/chat' do: [ :msg | window alert: msg ].
+generateGridWithPrefix: aString
+	|grid|
+	grid := Grid new.
+	self table withIndexDo: [:row :y|
+		row withIndexDo: [:ch :x|
+			grid at: x@y put: aString, ch]].
+	^grid
 ! !
 
 Object subclass: #Location
@@ -394,71 +211,220 @@ newAtPARC
 		lng: -122.149086
 ! !
 
-Object subclass: #GeoHash
-	instanceVariableNames: ''
+Object subclass: #FayeClient
+	instanceVariableNames: 'faye client'
 	category: 'SubWars-Client'!
 
-!GeoHash methodsFor: 'accessing'!
+!FayeClient methodsFor: 'actions'!
 
-table
-	^#(
-	#( 'b'	'c'	'f'	'g'	'u'	'v'	'y'	'a' )
-	#( '8'	'9'	'd'	'e'	's'	't'	'w'	'x' )
-	#( '2'	'3'	'6'	'7'	'k'	'm'	'q'	'r' )
-	#( '0'	'1'	'4'	'5'	'h'	'j'	'n'	'p' )
-	)
+disconnect
+	client ifNotNil: [client disconnect]
 ! !
 
-!GeoHash methodsFor: 'actions'!
+!FayeClient methodsFor: 'chat'!
 
-generateGrid
-	|str|
-	self table withIndexDo: [:row :y|
-		row withIndexDo: [:ch :x|
-			str := x asString, '@', y asString, ' ', ch.
-			console log: str]]
-!
-
-generateGridWithPrefix: aString
-	|grid|
-	grid := Grid new.
-	self table withIndexDo: [:row :y|
-		row withIndexDo: [:ch :x|
-			grid at: x@y put: aString, ch]].
-	^grid
+chat: aString
+	client publish: '/chat' val: aString
 ! !
 
-Object subclass: #Grid
-	instanceVariableNames: 'array'
-	category: 'SubWars-Client'!
-
-!Grid methodsFor: 'accessing'!
-
-at: aPoint
-	^(array at: aPoint y) at: aPoint x
-!
-
-at: aPoint put: anObject
-	|row|
-	row := array at: aPoint y ifAbsent: [array at: aPoint y put: #()].
-	row at: aPoint x put: anObject.
-! !
-
-!Grid methodsFor: 'initialization'!
+!FayeClient methodsFor: 'initialization'!
 
 initialize
-	array := #()
+	| loc url |
+	faye := window at: 'Faye'.
+	(faye at: 'Logging') at: 'logLevel' put: 'info'.
+	faye at: 'logger' put: [ :msg | console log: msg ].
+	
+	loc := window location.
+	url := location protocol, '//', location hostname.
+	loc port asString = '' ifFalse: [ url := url, ':', loc port asString ].
+	url := url, '/faye'.
+	
+	client := (faye at: 'Client') newValue: url.
+	client bind: 'transport:down' do: [ console log: 'Transport down' ].
+	client bind: 'transport:up' do: [ console log: 'Transport up' ].
+
+	client subscribe: '/chat' do: [ :msg | window alert: msg ].
 ! !
 
-!Grid methodsFor: 'printing'!
-
-printString
-	^'a Grid(', String lf,
-		((array collect: [:ea| ea join: String tab]) join: String lf),
-		String lf, ')'
-! !
-
-Object subclass: #Ship
-	instanceVariableNames: ''
+Widget subclass: #SubWarsApp
+	instanceVariableNames: 'div client geo currentLocation brand nav tools map polymaps consoleForm positionWatch'
 	category: 'SubWars-Client'!
+
+!SubWarsApp methodsFor: 'accessing'!
+
+pageClasses
+	^{ MapPage }
+! !
+
+!SubWarsApp methodsFor: 'actions'!
+
+show
+	self appendToJQuery: 'body' asJQuery
+!
+
+startTracking
+	|getPositionBlock|
+	self stopTracking.
+	getPositionBlock := [geo getCurrentPosition: [:pos| self updateLat: pos coords latitude lng: pos coords longitude]].
+	positionWatch := getPositionBlock valueWithInterval: 10 * 1000.
+	getPositionBlock value.
+	"geo watchPosition: [:position|
+		self updateLat: position coords latitude
+			lng: position coords longitude]"
+!
+
+stopTracking
+	positionWatch ifNotNil: [
+		window clearInterval: positionWatch.
+		positionWatch := nil]
+	"geo clearWatch"
+!
+
+destroy
+	geo ifNotNil: [geo clearWatch].
+	client ifNotNil: [client disconnect].
+	div ifNotNil: [div asJQuery remove].
+	positionWatch ifNotNil: [window clearInterval: positionWatch]
+!
+
+processConsoleCommand: aCommandString
+	(aCommandString match: '^gh ')
+		ifTrue: [window alert: 'I should lookup the GeoHash you provided']
+		ifFalse: [client chat: aCommandString]
+!
+
+updateLat: aLat lng: aLng
+	|loc geoJson coord|
+	loc := Location newLat: aLat lng: aLng.
+	loc updateGeoHash.
+	map center: #{ 'lat' -> aLat . 'lon' -> aLng }.
+
+	coord := Array new: 5.
+	coord
+		at: 1 put: (Array with: loc boundingMinLng with: loc boundingMinLat);
+		at: 2 put: (Array with: loc boundingMaxLng with: loc boundingMinLat);
+		at: 3 put: (Array with: loc boundingMaxLng with: loc boundingMaxLat);
+		at: 4 put: (Array with: loc boundingMinLng with: loc boundingMaxLat);
+		at: 5 put: (Array with: loc boundingMinLng with: loc boundingMinLat).
+		
+	geoJson := polymaps geoJson
+		features: (Array new: #{ 'geometry' -> #{ 'coordinates' -> coord . 'type' -> 'LineString' } });
+		on: 'load' do: [ :e | e features do: [ :feature |
+			feature element setAttribute: 'style' val: 'stroke: red;']].
+
+	map add: geoJson
+! !
+
+!SubWarsApp methodsFor: 'initialization'!
+
+initialize
+	super initialize.
+	client := FayeClient new.
+	geo := GeoLocation new.
+	currentLocation := Location newAtPARC.
+	polymaps := window org polymaps.
+! !
+
+!SubWarsApp methodsFor: 'rendering'!
+
+renderNavOn: html
+	html div class: 'navbar navbar-fixed-top'; with: [
+		html div class: 'navbar-inner'; with: [
+			html div class: 'container-fluid'; with: [
+				html a class: 'btn btn-navbar';
+					at: 'data-toggle' put: 'collapse';
+					at: 'data-target' put: '.nav-collapse';
+					with: [html span class: 'icon-bar'. html span class: 'icon-bar'. html span class: 'icon-bar'].
+				brand := html a class: 'brand'; href: '#'.
+				html div class: 'nav-collapse'; with: [ 
+					nav := html ul class: 'nav'.
+					tools := html ul class: 'nav pull-right']]]]
+!
+
+updateTools
+	tools contents: [:html|
+		html li class: 'dropdown'; with: [
+			html a href: '#'; class: 'dropdown-toggle'; at: 'data-toggle' put: 'dropdown'; with: [
+				html with: 'Tools '.
+				(html tag: 'b') class: 'caret'].
+			html ul class: 'dropdown-menu'; with: [
+				html li with: [html a with: 'Toggle IDE'; href: '#ide'; onClick: [:e| e preventDefault. window toggleAmberIDE]].
+				html li class: 'divider'.
+				html li with: [html a with: 'Browse SubWars'; href: '#browse'; onClick: [:e| e preventDefault. Browser openOn: SubWarsApp]].
+				html li with: [html a with: 'Inspect SubWars'; href: '#inspect'; onClick: [:e| e preventDefault. SubWarsApp instance inspect]].
+				html li with: [html a with: 'Restart SubWars'; href: '#restart'; onClick: [:e| e preventDefault. SubWarsApp restart]]]]]
+!
+
+renderOn: html
+	div := html div id: 'subwars'; with: [
+		self renderNavOn: html;
+			renderMapOn: html;
+			update;
+			startTracking]
+!
+
+update
+	self updateNav;
+		updateTools
+!
+
+renderMapOn: html
+	| svg |
+	html div id: 'map'.
+	<svg = document.getElementById("map").appendChild(org.polymaps.svg("svg"))>.
+	map := window org polymaps map container: svg.
+	map zoom: 16.
+	"midnight-commander: 999"
+	"SW-black-basic: 52152"
+	<self['@map'].add(org.polymaps.image()
+		.url(org.polymaps.url("http://{S}tile.cloudmade.com"
+		+ "/4dc7790c1c744bdab4909fdb857d642d" // subwars
+		+ "/999/256/{Z}/{X}/{Y}.png")
+		.hosts(["a.", "b.", "c.", ""])));>.
+!
+
+updateNav
+	nav contents: [:html|
+		html li with: [
+		consoleForm := html form class: 'form-search navbar-search pull-left'; with: [
+			html input
+				type: 'text';
+				id: 'console';
+				placeholder: 'Chat';
+				class: 'search-query span1'].
+
+		consoleForm asJQuery bind: 'submit' do: [:e :input|
+			e preventDefault.
+			input := '#console' asJQuery.
+			self processConsoleCommand: input val.
+			input val: '']].
+		html li with: [html a with: 'IDE'; href: '#ide'; onClick: [:e| e preventDefault. Browser openOn: SubWarsApp]]]
+! !
+
+SubWarsApp class instanceVariableNames: 'instance'!
+
+!SubWarsApp class methodsFor: 'accessing'!
+
+instance
+	^instance ifNil: [instance := self new]
+! !
+
+!SubWarsApp class methodsFor: 'actions'!
+
+start
+	^self instance
+		show;
+		yourself
+!
+
+restart
+	self instance ifNotNil: [self instance destroy].
+	instance := nil.
+	^self start
+!
+
+main
+	self start
+! !
 
