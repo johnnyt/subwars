@@ -16,6 +16,4 @@ tmp
 .chef/knife.rb
 
 # Heroku
-Gemfile
-Gemfile.lock
 node_modules
