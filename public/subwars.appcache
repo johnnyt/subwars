@@ -1,0 +1,21 @@
+CACHE MANIFEST
+# 2012-03-19 v2
+
+js/jquery-1.7.min.js
+less/subwars.less
+css/bootstrap.min.css
+js/jquery-ui-1.8.16/jquery-ui-1.8.16.css
+js/client.js
+js/less-1.1.3.min.js
+img/markers/human-normal.png
+
+amber/js/lib/CodeMirror/codemirror.css
+amber/js/lib/CodeMirror/amber.css
+amber/css/amber.css
+
+NETWORK:
+http://tile.cloudmade.com/*
+http://a.tile.cloudmade.com/*
+http://b.tile.cloudmade.com/*
+http://c.tile.cloudmade.com/*
+*
