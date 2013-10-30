@@ -1,3 +1,2 @@
-#! /usr/bin/env bash
-
-maglev-ruby application.rb
+#!/usr/bin/env bash
+maglev-ruby config.ru

@@ -1,19 +1,13 @@
-require 'rubygems'
-require 'bundler/setup'
-require 'rspec/core/rake_task'
+task :commit_code do
+  Maglev.persistent do
+    Maglev.abort_transaction
+    # Use load rather than require to force re-reading of the files
+    load File.expand_path("../lib/mag_model.rb", __FILE__)
+    %w[ player tile ].each do |model|
+      load File.expand_path("../app/models/#{model}.rb", __FILE__)
+    end
 
-task :default => :test
-task :test => :spec
-
-if !defined?(RSpec)
-  puts "spec targets require RSpec"
-else
-  desc "Run all examples"
-  RSpec::Core::RakeTask.new(:spec) do |t|
-    #t.pattern = 'spec/**/*_spec.rb' # not needed this is default
-    t.rspec_opts = ['-cfs']
+    Maglev.commit_transaction
+    puts "== Committed models"
   end
-end
-task :environment do
-  require File.join(File.dirname(__FILE__), 'environment')
 end
